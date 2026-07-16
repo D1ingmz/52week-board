@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>光线科技 · 52周重点任务看板</title>
+<style>
+:root {
+  --primary: #2D5F4E;
+  --dark: #1A3D2E;
+  --medium: #5B8C7A;
+  --light: #D5E0DB;
+  --lighter: #E8F0ED;
+  --white: #fff;
+  --text: #333;
+  --border: #A0BFB0;
+  --bg: #F5F7F6;
+  --done: #27AE60;
+  --progress: #F1C40F;
+  --todo: #E74C3C;
+  --overdue: #8B0000;
+  --short: #4A90D9;
+  --long: #F5A623;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ====== 顶部导航 ====== */
+.top-bar {
+  background: var(--primary);
+  color: var(--white);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  flex-wrap: wrap;
+}
+.top-bar h1 {
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.top-bar h1 .icon { font-size: 22px; }
+
+.stats-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.stat-item {
+  background: rgba(255,255,255,0.12);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ====== 筛选栏 ====== */
+.filter-bar {
+  background: var(--white);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--light);
+  flex-wrap: wrap;
+}
+.filter-label {
+  font-size: 13px;
+  color: #666;
+  font-weight: 600;
+}
+.filter-btn {
+  padding: 5px 14px;
+  border: 2px solid var(--light);
+  background: var(--white);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: var(--medium); }
+.filter-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+}
+.filter-btn .count {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+.week-display {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title .badge {
+  background: var(--medium);
+  color: white;
+  font-size: 12px;
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+.legend {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  color: #666;
+  margin-left: auto;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+/* ====== 看板区 ====== */
+.board-section {
+  padding: 16px 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+/* 门店卡片 */
+.store-card {
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border-left: 4px solid var(--medium);
+}
+.store-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+.store-card.group-A { border-left-color: #3498db; }
+.store-card.group-B { border-left-color: #2ecc71; }
+.store-card.group-C { border-left-color: #e67e22; }
+.store-card.group-D { border-left-color: #9b59b6; }
+
+/* 无任务卡片（精简版） */
+.store-card.no-task {
+  opacity: 0.6;
+}
+.store-card.no-task:hover { opacity: 1; }
+
+.card-header {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--lighter);
+}
+.card-header .store-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+.card-header .group-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: var(--white);
+}
+.group-tag.g-A { background: #3498db; }
+.group-tag.g-B { background: #2ecc71; }
+.group-tag.g-C { background: #e67e22; }
+.group-tag.g-D { background: #9b59b6; }
+
+.card-status-bar {
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--lighter);
+}
+.status-badge {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.status-badge.done { background: var(--done); color: white; }
+.status-badge.progress { background: var(--progress); color: #666; }
+.status-badge.todo { background: var(--todo); color: white; }
+.status-badge.overdue { background: var(--overdue); color: white; }
+.status-badge.none { background: #ccc; color: #666; }
+
+.type-badge {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.type-badge.short { background: var(--short); color: white; }
+.type-badge.long { background: var(--long); color: white; }
+.type-badge.none { background: #ccc; color: #666; }
+
+.card-week {
+  font-size: 12px;
+  color: #999;
+  margin-left: auto;
+}
+
+.card-body {
+  padding: 10px 14px;
+}
+.card-body .label {
+  font-size: 11px;
+  color: #999;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.card-body .content {
+  font-size: 13px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.card-body .content:last-child { margin-bottom: 0; }
+
+/* 无任务卡片精简内容 */
+.store-card.no-task .card-body {
+  padding: 8px 14px;
+}
+.store-card.no-task .card-body .content {
+  color: #999;
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+/* 展开区 */
+.card-expand {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  border-top: 1px solid var(--lighter);
+}
+.store-card.expanded .card-expand {
+  max-height: 500px;
+}
+.card-expand-content {
+  padding: 10px 14px;
+}
+.expand-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+.expand-row .e-label {
+  color: #999;
+  min-width: 70px;
+  flex-shrink: 0;
+}
+.expand-row .e-val {
+  color: var(--text);
+  flex: 1;
+}
+
+/* 进度条 */
+.progress-bar-wrap {
+  padding: 6px 14px;
+  background: var(--lighter);
+}
+.progress-bar {
+  height: 5px;
+  background: var(--light);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.progress-fill.done { background: var(--done); width: 100%; }
+.progress-fill.progress { background: var(--progress); width: 50%; }
+.progress-fill.todo { background: var(--todo); width: 5%; }
+.progress-fill.overdue { background: var(--overdue); width: 100%; }
+.progress-fill.none { background: #ccc; width: 0%; }
+.progress-text {
+  font-size: 11px;
+  color: #999;
+  margin-top: 3px;
+}
+
+/* 分区分隔 */
+.section-divider {
+  margin: 20px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-divider .line {
+  flex: 1;
+  height: 1px;
+  background: var(--light);
+}
+.section-divider .toggle-btn {
+  padding: 4px 12px;
+  border: 1px solid var(--light);
+  background: var(--white);
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #666;
+  transition: all 0.2s;
+}
+.section-divider .toggle-btn:hover {
+  border-color: var(--medium);
+  color: var(--primary);
+}
+.no-task-board {
+  display: none;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+.no-task-board.show {
+  display: grid;
+}
+
+/* 空状态 */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .board, .no-task-board { grid-template-columns: 1fr; }
+  .filter-bar { padding: 8px 12px; }
+  .top-bar { padding: 0 12px; height: auto; min-height: 56px; padding-top: 8px; padding-bottom: 8px; }
+  .stats-bar { width: 100%; gap: 4px; }
+  .stat-item { font-size: 11px; padding: 3px 8px; }
+  .legend { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<div class="top-bar">
+  <h1><span class="icon">📊</span> 光线科技 · 52周重点任务看板</h1>
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item"><span class="stat-dot" style="background:var(--done)"></span> 已完成 <span id="statDone">0</span></div>
+    <div class="stat-item"><span class="stat-dot" style="background:var(--progress)"></span> 进行中 <span id="statProgress">0</span></div>
+    <div class="stat-item"><span class="stat-dot" style="background:var(--todo)"></span> 未开始 <span id="statTodo">0</span></div>
+    <div class="stat-item"><span class="stat-dot" style="background:var(--overdue)"></span> 逾期 <span id="statOverdue">0</span></div>
+    <div class="stat-item" style="background:rgba(255,255,255,0.2)">完成率 <span id="statRate">0%</span></div>
+  </div>
+</div>
+
+<!-- 筛选栏 -->
+<div class="filter-bar">
+  <span class="filter-label">筛选：</span>
+  <button class="filter-btn active" onclick="filterGroup('all')">全部<span class="count">(30)</span></button>
+  <button class="filter-btn" onclick="filterGroup('A')">A组<span class="count">(7)</span></button>
+  <button class="filter-btn" onclick="filterGroup('B')">B组<span class="count">(9)</span></button>
+  <button class="filter-btn" onclick="filterGroup('C')">C组<span class="count">(6)</span></button>
+  <button class="filter-btn" onclick="filterGroup('D')">D组<span class="count">(8)</span></button>
+  <span class="week-display" id="weekDisplay">W29 · 7月第三周</span>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--short)"></div>短期</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--long)"></div>长期</div>
+  </div>
+</div>
+
+<!-- 有任务区 -->
+<div class="board-section">
+  <div class="section-divider">
+    <h2 class="section-title">📌 本周重点任务 <span class="badge" id="taskCount">0</span></h2>
+    <div class="line"></div>
+  </div>
+  <div class="board" id="board"></div>
+</div>
+
+<!-- 无任务区（折叠） -->
+<div class="board-section">
+  <div class="section-divider">
+    <h2 class="section-title" style="color:#999;">📋 待跟进门店 <span class="badge" style="background:#bbb;" id="noTaskCount">0</span></h2>
+    <div class="line"></div>
+    <button class="toggle-btn" onclick="toggleNoTask()" id="toggleBtn">展开 ▼</button>
+  </div>
+  <div class="no-task-board" id="noTaskBoard"></div>
+</div>
+
+<script>
+// ====== 门店数据 ======
+const stores = [
+  {name:"大庆新玛特", group:"A"},
+  {name:"红博公园", group:"A"},
+  {name:"西城红场", group:"A"},
+  {name:"金安", group:"A"},
+  {name:"华南万象汇", group:"A"},
+  {name:"鞍山万象汇", group:"A"},
+  {name:"沈阳三台子", group:"A"},
+  {name:"哈万象汇", group:"B"},
+  {name:"王府井", group:"B"},
+  {name:"大庆让胡路", group:"B"},
+  {name:"融创茂", group:"B"},
+  {name:"佳木斯万达", group:"B"},
+  {name:"大庆万达", group:"B"},
+  {name:"沈阳万象城", group:"B"},
+  {name:"大连甘井子", group:"B"},
+  {name:"卓展", group:"B"},
+  {name:"红旗茂", group:"C"},
+  {name:"大庆百货大楼", group:"C"},
+  {name:"香坊万达", group:"C"},
+  {name:"大连凯德", group:"C"},
+  {name:"沈阳盛京大奥莱", group:"C"},
+  {name:"沈阳K11", group:"C"},
+  {name:"哈东万达", group:"D"},
+  {name:"沈阳中海环宇城", group:"D"},
+  {name:"鞍山百盛", group:"D"},
+  {name:"教化", group:"D"},
+  {name:"顾乡凯德", group:"D"},
+  {name:"长春远大", group:"D"},
+  {name:"大庆乘风新玛特", group:"D"},
+  {name:"大连凯丹", group:"D"},
+];
+
+// ====== 任务数据 ======
+const tasks = {
+  "西城红场": {
+    week: "W29", status: "todo", type: "short",
+    summary: "缺人+能力不足（人力缺口待确认）",
+    focus: "确认缺人数量+补人计划；新人培训加速",
+    actions: "1.确认补人数量和时间表\n2.新人培训加速计划\n3.老员工能力改造方案",
+    owner: "店长", deadline: "7/20", completed: "",
+    note: "保接待量不低于基线"
+  },
+  "金安": {
+    week: "W29", status: "progress", type: "short",
+    summary: "转化率4.2（上周4.5，去年同比5.1）",
+    focus: "分解转化率下降原因：新人/老人/客流/货/场",
+    actions: "1.排班调整：分组报班、老带新补位\n2.现场补刀/转接机制\n3.每人设定接待目标（5.0）",
+    owner: "店长", deadline: "7/18", completed: "",
+    note: "日报中体现指令+跟踪"
+  },
+  "沈阳万象城": {
+    week: "W29", status: "progress", type: "long",
+    summary: "ACS占比偏低（本周需达20个下线）",
+    focus: "加强朋友圈宣发+企微添加+站人",
+    actions: "1.每日朋友圈宣发不少于3条\n2.企微添加每日跟踪\n3.站位引流排班",
+    owner: "店长", deadline: "持续", completed: "",
+    note: "复制鞍山万象汇模式"
+  }
+};
+
+// ====== 状态映射 ======
+const statusMap = {
+  done: {label:"已完成", class:"done", progress:100},
+  progress: {label:"进行中", class:"progress", progress:50},
+  todo: {label:"未开始", class:"todo", progress:5},
+  overdue: {label:"逾期", class:"overdue", progress:100},
+  none: {label:"暂无", class:"none", progress:0}
+};
+const typeMap = {
+  short: {label:"短期", class:"short"},
+  long: {label:"长期", class:"long"},
+  none: {label:"未定", class:"none"}
+};
+
+// ====== 渲染 ======
+let currentFilter = 'all';
+let noTaskExpanded = false;
+
+function render() {
+  const filtered = currentFilter === 'all'
+    ? stores
+    : stores.filter(s => s.group === currentFilter);
+
+  const withTask = filtered.filter(s => tasks[s.name]);
+  const withoutTask = filtered.filter(s => !tasks[s.name]);
+
+  // 统计（基于当前筛选范围）
+  let done=0, progress=0, todo=0, overdue=0;
+  filtered.forEach(s => {
+    const t = tasks[s.name];
+    if (!t) { todo++; return; }
+    switch(t.status) {
+      case 'done': done++; break;
+      case 'progress': progress++; break;
+      case 'todo': todo++; break;
+      case 'overdue': overdue++; break;
+    }
+  });
+  const total = filtered.length;
+  const rate = total > 0 ? Math.round(done/total*100) : 0;
+
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statProgress').textContent = progress;
+  document.getElementById('statTodo').textContent = todo;
+  document.getElementById('statOverdue').textContent = overdue;
+  document.getElementById('statRate').textContent = rate + '%';
+  document.getElementById('taskCount').textContent = withTask.length;
+  document.getElementById('noTaskCount').textContent = withoutTask.length;
+
+  // 渲染有任务卡片
+  const board = document.getElementById('board');
+  if (withTask.length === 0) {
+    board.innerHTML = '<div class="empty-state"><div style="font-size:36px;">📭</div><p>当前筛选下暂无重点任务</p></div>';
+  } else {
+    board.innerHTML = withTask.map(s => renderTaskCard(s)).join('');
+  }
+
+  // 渲染无任务卡片
+  const noBoard = document.getElementById('noTaskBoard');
+  noBoard.innerHTML = withoutTask.map(s => renderNoTaskCard(s)).join('');
+}
+
+function renderTaskCard(s) {
+  const t = tasks[s.name];
+  const status = statusMap[t.status];
+  const type = typeMap[t.type];
+  return `
+  <div class="store-card group-${s.group}" onclick="toggleExpand(this)" data-store="${s.name}">
+    <div class="card-header">
+      <span class="store-name">${s.name}</span>
+      <span class="group-tag g-${s.group}">${s.group}组</span>
+    </div>
+    <div class="card-status-bar">
+      <span class="status-badge ${status.class}">${status.label}</span>
+      <span class="type-badge ${type.class}">${type.label}</span>
+      <span class="card-week">${t.week}</span>
+    </div>
+    <div class="card-body">
+      <div class="label">数据摘要</div>
+      <div class="content">${t.summary}</div>
+      <div class="label">本周重点</div>
+      <div class="content">${t.focus}</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar">
+        <div class="progress-fill ${status.class}"></div>
+      </div>
+      <div class="progress-text">${status.label} · ${status.progress}%</div>
+    </div>
+    <div class="card-expand">
+      <div class="card-expand-content">
+        <div class="expand-row"><span class="e-label">执行指令</span><span class="e-val">${(t.actions||'').replace(/\n/g,'<br>')}</span></div>
+        <div class="expand-row"><span class="e-label">责任人</span><span class="e-val">${t.owner}</span></div>
+        <div class="expand-row"><span class="e-label">计划完成</span><span class="e-val">${t.deadline}</span></div>
+        <div class="expand-row"><span class="e-label">实际完成</span><span class="e-val">${t.completed || '—'}</span></div>
+        <div class="expand-row"><span class="e-label">备注</span><span class="e-val">${t.note || '—'}</span></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderNoTaskCard(s) {
+  return `
+  <div class="store-card no-task group-${s.group}" onclick="toggleExpand(this)">
+    <div class="card-header">
+      <span class="store-name">${s.name}</span>
+      <span class="group-tag g-${s.group}">${s.group}组</span>
+    </div>
+    <div class="card-body">
+      <div class="content">暂无重点任务</div>
+    </div>
+  </div>`;
+}
+
+function toggleExpand(card) {
+  card.classList.toggle('expanded');
+}
+
+function toggleNoTask() {
+  noTaskExpanded = !noTaskExpanded;
+  const board = document.getElementById('noTaskBoard');
+  const btn = document.getElementById('toggleBtn');
+  if (noTaskExpanded) {
+    board.classList.add('show');
+    btn.textContent = '收起 ▲';
+  } else {
+    board.classList.remove('show');
+    btn.textContent = '展开 ▼';
+  }
+}
+
+function filterGroup(group) {
+  currentFilter = group;
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.closest('.filter-btn').classList.add('active');
+  // 切换筛选时收起无任务区
+  noTaskExpanded = false;
+  document.getElementById('noTaskBoard').classList.remove('show');
+  document.getElementById('toggleBtn').textContent = '展开 ▼';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
