@@ -3,148 +3,122 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>光线科技 · 本周任务看板</title>
+<title>光线科技 · 本周任务看板 · W29</title>
 <style>
 :root {
-  --primary: #2D5F4E;
-  --dark: #1A3D2E;
-  --medium: #5B8C7A;
-  --light: #D5E0DB;
-  --lighter: #E8F0ED;
-  --white: #fff;
-  --text: #333;
-  --border: #A0BFB0;
-  --bg: #F5F7F6;
-  --done: #27AE60;
-  --progress: #F1C40F;
-  --todo: #E74C3C;
-  --overdue: #8B0000;
-  --short: #4A90D9;
-  --long: #F5A623;
-  --shadow: 0 2px 8px rgba(0,0,0,0.08);
-  --shadow-hover: 0 4px 16px rgba(0,0,0,0.12);
+  --primary:#2D5F4E; --dark:#1A3D2E; --medium:#5B8C7A; --light:#D5E0DB;
+  --lighter:#E8F0ED; --white:#fff; --text:#333; --bg:#F5F7F6;
+  --done:#27AE60; --progress:#F1C40F; --todo:#E74C3C; --overdue:#8B0000;
+  --short:#4A90D9; --long:#F5A623;
+  --shadow:0 2px 8px rgba(0,0,0,0.08); --shadow-hover:0 4px 16px rgba(0,0,0,0.12);
+  --col-A:#3498db; --col-B:#2ecc71; --col-C:#e67e22; --col-D:#9b59b6;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Microsoft YaHei','PingFang SC',sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
 
-.top-bar {
-  background: var(--primary); color: var(--white);
-  padding: 0 24px; display: flex; align-items: center; justify-content: space-between;
-  height: 56px; position: sticky; top: 0; z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15); flex-wrap: wrap;
-}
-.top-bar h1 { font-size: 18px; font-weight: 700; display:flex; align-items:center; gap:8px; }
-.top-bar .nav-links { display:flex; gap:12px; }
-.top-bar .nav-link {
-  color: rgba(255,255,255,0.8); text-decoration: none; font-size: 13px;
-  padding: 4px 12px; border-radius: 6px; transition: all 0.2s;
-}
-.top-bar .nav-link:hover { background: rgba(255,255,255,0.15); color: white; }
-.top-bar .nav-link.active { background: rgba(255,255,255,0.2); color: white; }
+.top-bar{background:var(--primary);color:var(--white);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.15);flex-wrap:wrap}
+.top-bar h1{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}
+.nav-links{display:flex;gap:8px}
+.nav-link{color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;padding:5px 14px;border-radius:6px;transition:all 0.2s}
+.nav-link:hover{background:rgba(255,255,255,0.15);color:white}
+.nav-link.active{background:rgba(255,255,255,0.2);color:white}
 
-.stats-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-.stat-item {
-  background: rgba(255,255,255,0.12); border-radius: 6px; padding: 4px 10px;
-  font-size: 12px; display: flex; align-items: center; gap: 4px; white-space: nowrap;
-}
-.stat-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+/* 趋势图区 */
+.trend-section{padding:16px 24px;max-width:1600px;margin:0 auto}
+.trend-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.trend-chart{background:var(--white);border-radius:10px;box-shadow:var(--shadow);padding:20px;overflow-x:auto}
+.trend-bars{display:flex;gap:12px;align-items:flex-end;min-height:160px;min-width:500px}
+.trend-bar-group{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:50px}
+.trend-bar{width:100%;max-width:40px;border-radius:6px 6px 0 0;transition:height 0.3s ease;position:relative;min-height:4px}
+.trend-bar.progress{background:linear-gradient(180deg,#F1C40F,#D4AC0D)}
+.trend-bar.done{background:linear-gradient(180deg,var(--done),#1E8449)}
+.trend-bar.overdue{background:linear-gradient(180deg,var(--overdue),#6B0000)}
+.trend-bar.empty{background:var(--light)}
+.trend-bar .bar-num{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:700;color:#666}
+.trend-bar-label{font-size:11px;color:#999;font-weight:600;white-space:nowrap}
+.trend-bar-date{font-size:10px;color:#ccc}
+.trend-summary{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap}
+.trend-summary-item{background:var(--lighter);border-radius:8px;padding:8px 14px;font-size:13px;display:flex;align-items:center;gap:6px}
+.trend-summary-item .ts-icon{font-size:16px}
+.trend-summary-item .ts-val{font-weight:700;color:var(--primary)}
 
-.filter-bar {
-  background: var(--white); padding: 10px 24px; display: flex; align-items: center;
-  gap: 10px; border-bottom: 1px solid var(--light); flex-wrap: wrap;
-}
-.filter-label { font-size: 13px; color: #666; font-weight: 600; }
-.filter-btn {
-  padding: 5px 14px; border: 2px solid var(--light); background: var(--white);
-  border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 600;
-  color: #666; transition: all 0.2s;
-}
-.filter-btn:hover { border-color: var(--medium); }
-.filter-btn.active { background: var(--primary); border-color: var(--primary); color: var(--white); }
-.filter-btn .count { font-size: 11px; opacity: 0.7; margin-left: 4px; }
-.week-display { font-size: 14px; font-weight: 700; color: var(--primary); }
-.section-title { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-.section-title .badge { background: var(--medium); color: white; font-size: 12px; padding: 1px 8px; border-radius: 10px; }
-.legend { display: flex; gap: 10px; font-size: 12px; color: #666; margin-left: auto; }
-.legend-item { display: flex; align-items: center; gap: 4px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+/* 搜索+筛选栏 */
+.filter-bar{background:var(--white);padding:10px 24px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--light);flex-wrap:wrap}
+.search-box{padding:6px 12px;border:2px solid var(--light);border-radius:20px;font-size:13px;width:200px;transition:all 0.2s;outline:none}
+.search-box:focus{border-color:var(--medium);width:260px}
+.filter-btn{padding:5px 14px;border:2px solid var(--light);background:var(--white);border-radius:20px;cursor:pointer;font-size:13px;font-weight:600;color:#666;transition:all 0.2s}
+.filter-btn:hover{border-color:var(--medium)}
+.filter-btn.active{background:var(--primary);border-color:var(--primary);color:var(--white)}
+.filter-btn .count{font-size:11px;opacity:0.7;margin-left:4px}
+.week-display{font-size:14px;font-weight:700;color:var(--primary)}
+.section-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.section-title .badge{background:var(--medium);color:white;font-size:12px;padding:1px 8px;border-radius:10px}
 
-.board-section { padding: 16px 24px; max-width: 1600px; margin: 0 auto; }
-.board { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+/* 看板 */
+.board-section{padding:16px 24px;max-width:1600px;margin:0 auto}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.store-card{background:var(--white);border-radius:10px;box-shadow:var(--shadow);overflow:hidden;transition:all 0.2s ease;cursor:pointer;border-left:4px solid var(--medium)}
+.store-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px)}
+.store-card.group-A{border-left-color:var(--col-A)} .store-card.group-B{border-left-color:var(--col-B)}
+.store-card.group-C{border-left-color:var(--col-C)} .store-card.group-D{border-left-color:var(--col-D)}
+.store-card.no-task{opacity:0.55} .store-card.no-task:hover{opacity:1}
 
-.store-card {
-  background: var(--white); border-radius: 10px; box-shadow: var(--shadow);
-  overflow: hidden; transition: all 0.2s ease; cursor: pointer;
-  border-left: 4px solid var(--medium);
-}
-.store-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
-.store-card.group-A { border-left-color: #3498db; }
-.store-card.group-B { border-left-color: #2ecc71; }
-.store-card.group-C { border-left-color: #e67e22; }
-.store-card.group-D { border-left-color: #9b59b6; }
-.store-card.no-task { opacity: 0.6; }
-.store-card.no-task:hover { opacity: 1; }
+.card-header{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;background:var(--lighter)}
+.card-header .store-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
+.card-header .streak-badge{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700;background:var(--primary);color:white}
+.group-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;color:var(--white)}
+.group-tag.g-A{background:var(--col-A)} .group-tag.g-B{background:var(--col-B)}
+.group-tag.g-C{background:var(--col-C)} .group-tag.g-D{background:var(--col-D)}
 
-.card-header { padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; background: var(--lighter); }
-.card-header .store-name { font-size: 14px; font-weight: 700; }
-.card-header .group-tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; color: var(--white); }
-.group-tag.g-A { background: #3498db; }
-.group-tag.g-B { background: #2ecc71; }
-.group-tag.g-C { background: #e67e22; }
-.group-tag.g-D { background: #9b59b6; }
+.card-status-bar{padding:6px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--lighter)}
+.status-badge{padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700}
+.status-badge.done{background:var(--done);color:white}
+.status-badge.progress{background:var(--progress);color:#666}
+.status-badge.overdue{background:var(--overdue);color:white}
+.type-badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700}
+.type-badge.short{background:var(--short);color:white}
+.type-badge.long{background:var(--long);color:white}
+.card-week{font-size:12px;color:#999;margin-left:auto}
 
-.card-status-bar { padding: 6px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--lighter); }
-.status-badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; }
-.status-badge.done { background: var(--done); color: white; }
-.status-badge.progress { background: var(--progress); color: #666; }
-.status-badge.todo { background: var(--todo); color: white; }
-.status-badge.overdue { background: var(--overdue); color: white; }
-.status-badge.none { background: #ccc; color: #666; }
-.type-badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
-.type-badge.short { background: var(--short); color: white; }
-.type-badge.long { background: var(--long); color: white; }
-.type-badge.none { background: #ccc; color: #666; }
-.card-week { font-size: 12px; color: #999; margin-left: auto; }
+.card-body{padding:10px 14px}
+.card-body .label{font-size:11px;color:#999;font-weight:600;margin-bottom:2px}
+.card-body .content{font-size:13px;margin-bottom:8px;line-height:1.5}
+.card-body .content:last-child{margin-bottom:0}
+.store-card.no-task .card-body{padding:8px 14px}
+.store-card.no-task .card-body .content{color:#999;font-style:italic;margin-bottom:0}
 
-.card-body { padding: 10px 14px; }
-.card-body .label { font-size: 11px; color: #999; font-weight: 600; margin-bottom: 2px; }
-.card-body .content { font-size: 13px; margin-bottom: 8px; line-height: 1.5; }
-.card-body .content:last-child { margin-bottom: 0; }
-.store-card.no-task .card-body { padding: 8px 14px; }
-.store-card.no-task .card-body .content { color: #999; font-style: italic; margin-bottom: 0; }
+.card-expand{max-height:0;overflow:hidden;transition:max-height 0.3s ease;border-top:1px solid var(--lighter)}
+.store-card.expanded .card-expand{max-height:600px}
+.card-expand-content{padding:10px 14px}
+.expand-row{display:flex;gap:8px;margin-bottom:6px;font-size:12px}
+.expand-row .e-label{color:#999;min-width:70px;flex-shrink:0}
+.expand-row .e-val{color:var(--text);flex:1}
 
-.card-expand { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--lighter); }
-.store-card.expanded .card-expand { max-height: 500px; }
-.card-expand-content { padding: 10px 14px; }
-.expand-row { display: flex; gap: 8px; margin-bottom: 6px; font-size: 12px; }
-.expand-row .e-label { color: #999; min-width: 70px; flex-shrink: 0; }
-.expand-row .e-val { color: var(--text); flex: 1; }
+.progress-bar-wrap{padding:6px 14px;background:var(--lighter)}
+.progress-bar{height:5px;background:var(--light);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width 0.3s ease}
+.progress-fill.done{background:var(--done);width:100%}
+.progress-fill.progress{background:var(--progress);width:50%}
+.progress-fill.overdue{background:var(--overdue);width:100%}
+.progress-fill.none{background:#ccc;width:0%}
+.progress-text{font-size:11px;color:#999;margin-top:3px}
 
-.progress-bar-wrap { padding: 6px 14px; background: var(--lighter); }
-.progress-bar { height: 5px; background: var(--light); border-radius: 3px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s ease; }
-.progress-fill.done { background: var(--done); width: 100%; }
-.progress-fill.progress { background: var(--progress); width: 50%; }
-.progress-fill.todo { background: var(--todo); width: 5%; }
-.progress-fill.overdue { background: var(--overdue); width: 100%; }
-.progress-fill.none { background: #ccc; width: 0%; }
-.progress-text { font-size: 11px; color: #999; margin-top: 3px; }
+.section-divider{margin:20px 0 12px;display:flex;align-items:center;gap:12px}
+.section-divider .line{flex:1;height:1px;background:var(--light)}
+.section-divider .toggle-btn{padding:4px 12px;border:1px solid var(--light);background:var(--white);border-radius:16px;cursor:pointer;font-size:12px;color:#666;transition:all 0.2s}
+.section-divider .toggle-btn:hover{border-color:var(--medium);color:var(--primary)}
+.no-task-board{display:none;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.no-task-board.show{display:grid}
+.empty-state{grid-column:1/-1;text-align:center;padding:40px 20px;color:#999}
 
-.section-divider { margin: 20px 0 12px; display: flex; align-items: center; gap: 12px; }
-.section-divider .line { flex: 1; height: 1px; background: var(--light); }
-.section-divider .toggle-btn { padding: 4px 12px; border: 1px solid var(--light); background: var(--white); border-radius: 16px; cursor: pointer; font-size: 12px; color: #666; transition: all 0.2s; }
-.section-divider .toggle-btn:hover { border-color: var(--medium); color: var(--primary); }
-.no-task-board { display: none; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
-.no-task-board.show { display: grid; }
-.empty-state { grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #999; }
-
-@media (max-width: 768px) {
-  .board, .no-task-board { grid-template-columns: 1fr; }
-  .filter-bar { padding: 8px 12px; }
-  .top-bar { padding: 0 12px; height: auto; min-height: 56px; padding-top: 8px; padding-bottom: 8px; }
-  .stats-bar { width: 100%; gap: 4px; }
-  .stat-item { font-size: 11px; padding: 3px 8px; }
-  .legend { display: none; }
+@media (max-width:768px){
+  .board,.no-task-board{grid-template-columns:1fr}
+  .filter-bar{padding:8px 12px}
+  .top-bar{padding:0 12px;height:auto;min-height:56px;padding-top:8px;padding-bottom:8px}
+  .nav-links{display:none}
+  .search-box{width:140px} .search-box:focus{width:180px}
+  .trend-section{padding:12px}
+  .trend-bars{min-width:300px}
 }
 </style>
 </head>
@@ -155,31 +129,41 @@ body { font-family:'Microsoft YaHei','PingFang SC',sans-serif; background:var(--
   <div class="nav-links">
     <a class="nav-link" href="/52week-board/">总看板</a>
     <a class="nav-link active" href="/52week-board/current.html">本周看板</a>
+    <a class="nav-link" href="/52week-board/stores.html">全门店一览</a>
   </div>
 </div>
 
+<!-- 趋势图 -->
+<div class="trend-section">
+  <div class="trend-title">📈 周度任务趋势</div>
+  <div class="trend-chart">
+    <div class="trend-bars" id="trendBars"></div>
+    <div class="trend-summary" id="trendSummary"></div>
+  </div>
+</div>
+
+<!-- 搜索+筛选 -->
 <div class="filter-bar">
-  <span class="filter-label">筛选：</span>
-  <button class="filter-btn active" onclick="filterGroup('all')">全部<span class="count">(30)</span></button>
-  <button class="filter-btn" onclick="filterGroup('A')">A组<span class="count">(7)</span></button>
-  <button class="filter-btn" onclick="filterGroup('B')">B组<span class="count">(9)</span></button>
-  <button class="filter-btn" onclick="filterGroup('C')">C组<span class="count">(6)</span></button>
-  <button class="filter-btn" onclick="filterGroup('D')">D组<span class="count">(8)</span></button>
+  <input type="text" class="search-box" placeholder="🔍 搜索门店..." id="searchBox" oninput="handleSearch()">
+  <button class="filter-btn active" onclick="filterView('focus')">重点门店<span class="count">(2)</span></button>
+  <button class="filter-btn" onclick="filterView('all')">全部任务<span class="count">(7)</span></button>
+  <button class="filter-btn" onclick="filterView('A')">A组</button>
+  <button class="filter-btn" onclick="filterView('B')">B组</button>
+  <button class="filter-btn" onclick="filterView('C')">C组</button>
+  <button class="filter-btn" onclick="filterView('D')">D组</button>
   <span class="week-display">W29 · 7月第三周</span>
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:var(--short)"></div>短期</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--long)"></div>长期</div>
-  </div>
 </div>
 
+<!-- 有任务区 -->
 <div class="board-section">
   <div class="section-divider">
-    <h2 class="section-title">📌 本周重点任务 <span class="badge" id="taskCount">0</span></h2>
+    <h2 class="section-title">📌 本周重点跟进 <span class="badge" id="taskCount">0</span></h2>
     <div class="line"></div>
   </div>
   <div class="board" id="board"></div>
 </div>
 
+<!-- 无任务区 -->
 <div class="board-section">
   <div class="section-divider">
     <h2 class="section-title" style="color:#999;">📋 待跟进门店 <span class="badge" style="background:#bbb;" id="noTaskCount">0</span></h2>
@@ -190,102 +174,159 @@ body { font-family:'Microsoft YaHei','PingFang SC',sans-serif; background:var(--
 </div>
 
 <script>
-const stores = [
-  {name:"大庆新玛特", group:"A"},{name:"红博公园", group:"A"},
-  {name:"西城红场", group:"A"},{name:"金安", group:"A"},
-  {name:"华南万象汇", group:"A"},{name:"鞍山万象汇", group:"A"},
-  {name:"沈阳三台子", group:"A"},
-  {name:"哈万象汇", group:"B"},{name:"王府井", group:"B"},
-  {name:"大庆让胡路", group:"B"},{name:"融创茂", group:"B"},
-  {name:"佳木斯万达", group:"B"},{name:"大庆万达", group:"B"},
-  {name:"沈阳万象城", group:"B"},{name:"大连甘井子", group:"B"},
-  {name:"卓展", group:"B"},
-  {name:"红旗茂", group:"C"},{name:"大庆百货大楼", group:"C"},
-  {name:"香坊万达", group:"C"},{name:"大连凯德", group:"C"},
-  {name:"沈阳盛京大奥莱", group:"C"},{name:"沈阳K11", group:"C"},
-  {name:"哈东万达", group:"D"},{name:"沈阳中海环宇城", group:"D"},
-  {name:"鞍山百盛", group:"D"},{name:"教化", group:"D"},
-  {name:"顾乡凯德", group:"D"},{name:"长春远大", group:"D"},
-  {name:"大庆乘风新玛特", group:"D"},{name:"大连凯丹", group:"D"},
+const stores=[
+  {name:"大庆新玛特",group:"A"},{name:"红博公园",group:"A"},
+  {name:"西城红场",group:"A"},{name:"金安",group:"A"},
+  {name:"华南万象汇",group:"A"},{name:"鞍山万象汇",group:"A"},
+  {name:"沈阳三台子",group:"A"},
+  {name:"哈万象汇",group:"B"},{name:"王府井",group:"B"},
+  {name:"大庆让胡路",group:"B"},{name:"融创茂",group:"B"},
+  {name:"佳木斯万达",group:"B"},{name:"大庆万达",group:"B"},
+  {name:"沈阳万象城",group:"B"},{name:"大连甘井子",group:"B"},
+  {name:"卓展",group:"B"},
+  {name:"红旗茂",group:"C"},{name:"大庆百货大楼",group:"C"},
+  {name:"香坊万达",group:"C"},{name:"大连凯德",group:"C"},
+  {name:"沈阳盛京大奥莱",group:"C"},{name:"沈阳K11",group:"C"},
+  {name:"哈东万达",group:"D"},{name:"沈阳中海环宇城",group:"D"},
+  {name:"鞍山百盛",group:"D"},{name:"教化",group:"D"},
+  {name:"顾乡凯德",group:"D"},{name:"长春远大",group:"D"},
+  {name:"大庆乘风新玛特",group:"D"},{name:"大连凯丹",group:"D"},
 ];
+
+// 重点门店（默认显示）
+const focusStores = ["西城红场","金安"];
+
+// 跟进周数记录（模拟历史数据，后续真实更新）
+const streakData = {
+  "西城红场": 5,   // W25~W29 连续5周
+  "金安": 2,       // W28~W29 连续2周
+  "佳木斯万达": 3,  // W27~W29 连续3周
+  "大连甘井子": 1,
+  "大连凯德": 1,
+  "沈阳万象城": 2,
+  "香坊万达": 1,
+};
 
 const tasks = {
   "西城红场": {
-    week: "W29", status: "progress", type: "short",
-    summary: "能力+服务两方面面临管理挑战（公司TOP1客流店）",
-    focus: "达成涨幅跟踪；店长出差期间服务表现；新人培训加速",
-    actions: "1.确认缺人数量和补人时间表，保接待量不低于基线\n2.新人培训加速计划，结构化学习+当堂考核+跟踪验收\n3.老员工能力改造方案，对「观察」放养式培养说no\n4.现场补刀/转接机制保成交\n5.店长出差期间服务标准不能降，每日监控复盘",
-    owner: "店长", deadline: "本周", completed: "",
-    note: "高客流高机会下若指标做不到第一，说明管理/销售能力有缺失"
+    week:"W29",status:"progress",type:"long",
+    summary:"能力+服务两方面面临管理挑战（公司TOP1客流店）",
+    focus:"达成涨幅跟踪；店长出差期间服务表现；新人培训加速",
+    actions:"1.确认缺人数量和补人时间表，保接待量不低于基线\n2.新人培训加速计划，结构化学习+当堂考核+跟踪验收\n3.老员工能力改造方案，对「观察」放养式培养说no\n4.现场补刀/转接机制保成交\n5.店长出差期间服务标准不能降，每日监控复盘",
+    owner:"店长",deadline:"本周",completed:"",
+    note:"高客流高机会下若指标做不到第一，说明管理/销售能力有缺失"
   },
   "金安": {
-    week: "W29", status: "progress", type: "short",
-    summary: "转化率4.2→5.1；新人赵毅/老人李悦数据待提升；姜勇旭郭善勇业绩提升；拓竹0开单",
-    focus: "新人赵毅、老人李悦数据是否有提升；姜勇旭、郭善勇业绩提升；拓竹本周破零",
-    actions: "1.排班调整：分组报班、老带新补位\n2.现场补刀/转接机制保成交\n3.每人设定接待目标（5.0），用一天时间统计每人接待数据\n4.新人赵毅数据专项跟踪，确认成长曲线\n5.老人李悦数据对比上周，确认是否回升\n6.姜勇旭、郭善勇业绩提升方案制定并跟踪\n7.拓竹业务专项跟进，本周必须破零\n8.日报中体现具体执行指令+跟踪记录",
-    owner: "店长", deadline: "本周", completed: "",
-    note: "数据需有上周同比和去年同比；拿数据说话不是挑毛病"
+    week:"W29",status:"progress",type:"long",
+    summary:"转化率4.2→5.1；新人赵毅/老人李悦数据待提升；姜勇旭郭善勇业绩提升；拓竹0开单",
+    focus:"新人赵毅、老人李悦数据是否有提升；姜勇旭、郭善勇业绩提升；拓竹本周破零",
+    actions:"1.排班调整：分组报班、老带新补位\n2.现场补刀/转接机制保成交\n3.每人设定接待目标（5.0），用一天时间统计每人接待数据\n4.新人赵毅数据专项跟踪，确认成长曲线\n5.老人李悦数据对比上周，确认是否回升\n6.姜勇旭、郭善勇业绩提升方案制定并跟踪\n7.拓竹业务专项跟进，本周必须破零\n8.日报中体现具体执行指令+跟踪记录",
+    owner:"店长",deadline:"本周",completed:"",
+    note:"数据需有上周同比和去年同比；拿数据说话不是挑毛病"
   },
   "大连甘井子": {
-    week: "W29", status: "progress", type: "short",
-    summary: "全维度达成跟进，确认周环比",
-    focus: "全维度达成跟进；确认本周短板人员和项目；增加线下销售额",
-    actions: "1.拉取本周各项指标数据（转化率/连带率/ACS/回收/同比）\n2.与上周做周环比对比，确认趋势变化\n3.确认短板人员（具体到个人）和短板项目\n4.对短板人员制定改善动作并跟踪\n5.线下销售额提升方案制定",
-    owner: "店长", deadline: "本周", completed: "",
-    note: "重点关注，待确认具体数据后更新"
+    week:"W29",status:"progress",type:"short",
+    summary:"全维度达成跟进，确认周环比",
+    focus:"全维度达成跟进；确认本周短板人员和项目；增加线下销售额",
+    actions:"1.拉取本周各项指标数据（转化率/连带率/ACS/回收/同比）\n2.与上周做周环比对比，确认趋势变化\n3.确认短板人员（具体到个人）和短板项目\n4.对短板人员制定改善动作并跟踪\n5.线下销售额提升方案制定",
+    owner:"店长",deadline:"本周",completed:"",
+    note:"重点关注，待确认具体数据后更新"
   },
   "大连凯德": {
-    week: "W29", status: "progress", type: "short",
-    summary: "业绩达成跟进，做好周环比，确认短板人员和项目，增加线下销售额",
-    focus: "业绩达成周环比分析；短板人员确认；线下销售额提升",
-    actions: "1.拉取本周各项指标数据（转化率/连带率/ACS/回收/同比）\n2.与上周做周环比对比，确认趋势变化\n3.确认短板人员（具体到个人）和短板项目\n4.对短板人员制定改善动作并跟踪\n5.线下销售额提升方案制定",
-    owner: "店长", deadline: "本周", completed: "",
-    note: "重点关注，待确认具体数据后更新"
+    week:"W29",status:"progress",type:"short",
+    summary:"业绩达成跟进，做好周环比，确认短板人员和项目，增加线下销售额",
+    focus:"业绩达成周环比分析；短板人员确认；线下销售额提升",
+    actions:"1.拉取本周各项指标数据（转化率/连带率/ACS/回收/同比）\n2.与上周做周环比对比，确认趋势变化\n3.确认短板人员（具体到个人）和短板项目\n4.对短板人员制定改善动作并跟踪\n5.线下销售额提升方案制定",
+    owner:"店长",deadline:"本周",completed:"",
+    note:"重点关注，待确认具体数据后更新"
   },
   "沈阳万象城": {
-    week: "W29", status: "progress", type: "long",
-    summary: "人货场全维度提升；拓竹0开单；ACS偏低需达20个下线",
-    focus: "人的能力提升（店长能力+老人单洪崧达成涨幅+新人孙思颖达成）；拓竹业务破零",
-    actions: "1.店长能力提升跟踪，确认管理动作落地\n2.老人单洪崧达成涨幅跟踪，与上周同比\n3.新人孙思颖达成情况跟踪，确认成长曲线\n4.拓竹业务专项跟进，本周必须破零\n5.每日朋友圈宣发不少于3条\n6.企微添加每日跟踪（目标20个下线）\n7.站位引流排班，加强外部宣发",
-    owner: "店长", deadline: "本周", completed: "",
-    note: "复制鞍山万象汇模式（日均接待8-9次、企微增粉41个）；内部演练多但外部宣发弱"
+    week:"W29",status:"progress",type:"short",
+    summary:"人货场全维度提升；拓竹0开单；ACS偏低需达20个下线",
+    focus:"人的能力提升（店长能力+老人单洪崧达成涨幅+新人孙思颖达成）；拓竹业务破零",
+    actions:"1.店长能力提升跟踪，确认管理动作落地\n2.老人单洪崧达成涨幅跟踪，与上周同比\n3.新人孙思颖达成情况跟踪，确认成长曲线\n4.拓竹业务专项跟进，本周必须破零\n5.每日朋友圈宣发不少于3条\n6.企微添加每日跟踪（目标20个下线）\n7.站位引流排班，加强外部宣发",
+    owner:"店长",deadline:"本周",completed:"",
+    note:"复制鞍山万象汇模式（日均接待8-9次、企微增粉41个）；内部演练多但外部宣发弱"
   },
   "佳木斯万达": {
-    week: "W29", status: "progress", type: "long",
-    summary: "持续关注不能松懈的门店，需跟踪四个维度达成",
-    focus: "3PP连接率达成；门店销售业绩达成分析；新人成长进度跟进",
-    actions: "1.3PP配件连接率数据拉取，与上周同比，确认是否达标\n2.门店整体销售业绩达成分析，确认趋势\n3.新人成长进度跟进（结构化学习+考核验收）\n4.各项指标周环比跟踪，发现异常立即干预\n5.保持稳定不松懈，日报跟踪到个人",
-    owner: "店长", deadline: "持续", completed: "",
-    note: "持续关注型，不能因为稳定就放松跟踪"
+    week:"W29",status:"progress",type:"long",
+    summary:"持续关注不能松懈的门店，需跟踪四个维度达成",
+    focus:"3PP连接率达成；门店销售业绩达成分析；新人成长进度跟进",
+    actions:"1.3PP配件连接率数据拉取，与上周同比，确认是否达标\n2.门店整体销售业绩达成分析，确认趋势\n3.新人成长进度跟进（结构化学习+考核验收）\n4.各项指标周环比跟踪，发现异常立即干预\n5.保持稳定不松懈，日报跟踪到个人",
+    owner:"店长",deadline:"持续",completed:"",
+    note:"持续关注型，不能因为稳定就放松跟踪"
   },
   "香坊万达": {
-    week: "W29", status: "progress", type: "short",
-    summary: "业绩达成低于哈东万达，需启动调查复盘",
-    focus: "达成调查复盘，找出业绩低于哈东的原因",
-    actions: "1.拉取本周香坊万达各项指标数据\n2.同步拉取哈东万达数据作为对比基准\n3.人货场维度分析差距原因（人员能力/客流/货品/场区）\n4.确认是否为人员能力问题还是客流结构问题\n5.制定改善方案并跟踪执行\n6.日报中体现复盘结论和改善动作",
-    owner: "店长", deadline: "本周", completed: "",
-    note: "同区域对比异常，需深挖原因，不能停留在表面数据"
+    week:"W29",status:"progress",type:"short",
+    summary:"业绩达成低于哈东万达，需启动调查复盘",
+    focus:"达成调查复盘，找出业绩低于哈东的原因",
+    actions:"1.拉取本周香坊万达各项指标数据\n2.同步拉取哈东万达数据作为对比基准\n3.人货场维度分析差距原因（人员能力/客流/货品/场区）\n4.确认是否为人员能力问题还是客流结构问题\n5.制定改善方案并跟踪执行\n6.日报中体现复盘结论和改善动作",
+    owner:"店长",deadline:"本周",completed:"",
+    note:"同区域对比异常，需深挖原因，不能停留在表面数据"
   }
 };
 
-const statusMap = {
-  done: {label:"已完成", class:"done", progress:100},
-  progress: {label:"进行中", class:"progress", progress:50},
-  todo: {label:"未开始", class:"todo", progress:5},
-  overdue: {label:"逾期", class:"overdue", progress:100},
-  none: {label:"暂无", class:"none", progress:0}
-};
-const typeMap = {
-  short: {label:"短期", class:"short"},
-  long: {label:"长期", class:"long"},
-  none: {label:"未定", class:"none"}
-};
+const statusMap={done:{label:"已完成",class:"done",progress:100},progress:{label:"进行中",class:"progress",progress:50},todo:{label:"未开始",class:"todo",progress:5},overdue:{label:"逾期",class:"overdue",progress:100},none:{label:"暂无",class:"none",progress:0}};
+const typeMap={short:{label:"短期",class:"short"},long:{label:"长期",class:"long"},none:{label:"未定",class:"none"}};
 
-let currentFilter = 'all';
+let currentView = 'focus';
+let searchTerm = '';
 let noTaskExpanded = false;
 
+// ====== 渲染趋势图 ======
+function renderTrend() {
+  // 近4周数据模拟（W26~W29），后续真实更新
+  const trendData = [
+    {week:"W26", date:"6月第四周", progress:0, done:0, overdue:0},
+    {week:"W27", date:"7月第一周", progress:0, done:0, overdue:0},
+    {week:"W28", date:"7月第二周", progress:2, done:0, overdue:0},
+    {week:"W29", date:"7月第三周", progress:7, done:0, overdue:0},
+  ];
+  const maxVal = Math.max(...trendData.map(d=>d.progress+d.done+d.overdue), 1);
+  const barH = 120;
+
+  const barsHtml = trendData.map(d => {
+    const total = d.progress + d.done + d.overdue;
+    const isCurrent = d.week === "W29";
+    const pH = d.progress ? Math.round(d.progress/maxVal*barH) : 0;
+    const dH = d.done ? Math.round(d.done/maxVal*barH) : 0;
+    const oH = d.overdue ? Math.round(d.overdue/maxVal*barH) : 0;
+    return `<div class="trend-bar-group">
+      <div class="trend-bar ${total>0?'progress':'empty'}" style="height:${pH+dH+oH||4}px;${isCurrent?'box-shadow:0 0 0 2px var(--primary);':''}">
+        ${total>0?`<span class="bar-num">${total}</span>`:''}
+      </div>
+      <span class="trend-bar-label" style="${isCurrent?'color:var(--primary);font-weight:700;':''}">${d.week}</span>
+      <span class="trend-bar-date">${d.date}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('trendBars').innerHTML = barsHtml;
+
+  // 汇总
+  const totalTasks = Object.keys(tasks).length;
+  const maxStreak = Math.max(...Object.values(streakData));
+  const longTasks = Object.values(tasks).filter(t=>t.type==='long').length;
+  const shortTasks = totalTasks - longTasks;
+  document.getElementById('trendSummary').innerHTML = `
+    <div class="trend-summary-item"><span class="ts-icon">📌</span> 本周任务 <span class="ts-val">${totalTasks}</span></div>
+    <div class="trend-summary-item"><span class="ts-icon">🔥</span> 最长连续跟进 <span class="ts-val">${maxStreak}周</span></div>
+    <div class="trend-summary-item"><span class="ts-icon">🔄</span> 长期任务 <span class="ts-val">${longTasks}</span></div>
+    <div class="trend-summary-item"><span class="ts-icon">⚡</span> 短期任务 <span class="ts-val">${shortTasks}</span></div>
+  `;
+}
+
+// ====== 渲染看板 ======
 function render() {
-  const filtered = currentFilter === 'all' ? stores : stores.filter(s => s.group === currentFilter);
+  let filtered;
+  if (searchTerm) {
+    filtered = stores.filter(s => s.name.includes(searchTerm));
+  } else if (currentView === 'focus') {
+    filtered = stores.filter(s => focusStores.includes(s.name));
+  } else if (currentView === 'all') {
+    filtered = stores;
+  } else {
+    filtered = stores.filter(s => s.group === currentView);
+  }
+
   const withTask = filtered.filter(s => tasks[s.name]);
   const withoutTask = filtered.filter(s => !tasks[s.name]);
 
@@ -294,7 +335,7 @@ function render() {
 
   const board = document.getElementById('board');
   if (withTask.length === 0) {
-    board.innerHTML = '<div class="empty-state"><div style="font-size:36px;">📭</div><p>当前筛选下暂无重点任务</p></div>';
+    board.innerHTML = '<div class="empty-state"><div style="font-size:36px;">🔍</div><p>未找到匹配的门店</p></div>';
   } else {
     board.innerHTML = withTask.map(s => renderTaskCard(s)).join('');
   }
@@ -307,11 +348,15 @@ function renderTaskCard(s) {
   const t = tasks[s.name];
   const status = statusMap[t.status];
   const type = typeMap[t.type];
+  const streak = streakData[s.name] || 0;
   return `
   <div class="store-card group-${s.group}" onclick="toggleExpand(this)" data-store="${s.name}">
     <div class="card-header">
       <span class="store-name">${s.name}</span>
-      <span class="group-tag g-${s.group}">${s.group}组</span>
+      <div style="display:flex;gap:6px;align-items:center;">
+        ${streak>1?`<span class="streak-badge">🔥连续${streak}周</span>`:''}
+        <span class="group-tag g-${s.group}">${s.group}组</span>
+      </div>
     </div>
     <div class="card-status-bar">
       <span class="status-badge ${status.class}">${status.label}</span>
@@ -333,8 +378,8 @@ function renderTaskCard(s) {
         <div class="expand-row"><span class="e-label">执行指令</span><span class="e-val">${(t.actions||'').replace(/\n/g,'<br>')}</span></div>
         <div class="expand-row"><span class="e-label">责任人</span><span class="e-val">${t.owner}</span></div>
         <div class="expand-row"><span class="e-label">计划完成</span><span class="e-val">${t.deadline}</span></div>
-        <div class="expand-row"><span class="e-label">实际完成</span><span class="e-val">${t.completed || '—'}</span></div>
-        <div class="expand-row"><span class="e-label">备注</span><span class="e-val">${t.note || '—'}</span></div>
+        <div class="expand-row"><span class="e-label">实际完成</span><span class="e-val">${t.completed||'—'}</span></div>
+        <div class="expand-row"><span class="e-label">备注</span><span class="e-val">${t.note||'—'}</span></div>
       </div>
     </div>
   </div>`;
@@ -351,22 +396,12 @@ function renderNoTaskCard(s) {
   </div>`;
 }
 
-function toggleExpand(card) { card.classList.toggle('expanded'); }
-function toggleNoTask() {
-  noTaskExpanded = !noTaskExpanded;
-  document.getElementById('noTaskBoard').classList.toggle('show', noTaskExpanded);
-  document.getElementById('toggleBtn').textContent = noTaskExpanded ? '收起 ▲' : '展开 ▼';
-}
-function filterGroup(group) {
-  currentFilter = group;
-  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.closest('.filter-btn').classList.add('active');
-  noTaskExpanded = false;
-  document.getElementById('noTaskBoard').classList.remove('show');
-  document.getElementById('toggleBtn').textContent = '展开 ▼';
-  render();
-}
+function toggleExpand(card){card.classList.toggle('expanded')}
+function toggleNoTask(){noTaskExpanded=!noTaskExpanded;document.getElementById('noTaskBoard').classList.toggle('show',noTaskExpanded);document.getElementById('toggleBtn').textContent=noTaskExpanded?'收起 ▲':'展开 ▼'}
+function filterView(view){currentView=view;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));event.target.closest('.filter-btn').classList.add('active');noTaskExpanded=false;document.getElementById('noTaskBoard').classList.remove('show');document.getElementById('toggleBtn').textContent='展开 ▼';render()}
+function handleSearch(){searchTerm=document.getElementById('searchBox').value.trim();render()}
 
+renderTrend();
 render();
 </script>
 </body>

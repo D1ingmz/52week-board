@@ -6,152 +6,109 @@
 <title>光线科技 · 52周任务总看板</title>
 <style>
 :root {
-  --primary: #2D5F4E;
-  --dark: #1A3D2E;
-  --medium: #5B8C7A;
-  --light: #D5E0DB;
-  --lighter: #E8F0ED;
-  --white: #fff;
-  --text: #333;
-  --bg: #F5F7F6;
-  --done: #27AE60;
-  --progress: #F1C40F;
-  --todo: #E74C3C;
-  --overdue: #8B0000;
-  --shadow: 0 2px 8px rgba(0,0,0,0.08);
-  --shadow-hover: 0 4px 16px rgba(0,0,0,0.12);
+  --primary:#2D5F4E; --dark:#1A3D2E; --medium:#5B8C7A; --light:#D5E0DB;
+  --lighter:#E8F0ED; --white:#fff; --text:#333; --bg:#F5F7F6;
+  --done:#27AE60; --progress:#F1C40F; --todo:#E74C3C; --overdue:#8B0000;
+  --shadow:0 2px 8px rgba(0,0,0,0.08); --shadow-hover:0 4px 16px rgba(0,0,0,0.12);
+  --col-A:#3498db; --col-B:#2ecc71; --col-C:#e67e22; --col-D:#9b59b6;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Microsoft YaHei','PingFang SC',sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
 
 /* 顶部导航 */
-.top-bar {
-  background: var(--primary); color: var(--white);
-  padding: 0 24px; display: flex; align-items: center; justify-content: space-between;
-  height: 56px; position: sticky; top: 0; z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-.top-bar h1 { font-size: 18px; font-weight: 700; display:flex; align-items:center; gap:8px; }
-.top-bar .nav-links { display:flex; gap:12px; }
-.top-bar .nav-link {
-  color: rgba(255,255,255,0.8); text-decoration: none; font-size: 13px;
-  padding: 4px 12px; border-radius: 6px; transition: all 0.2s;
-}
-.top-bar .nav-link:hover { background: rgba(255,255,255,0.15); color: white; }
-.top-bar .nav-link.active { background: rgba(255,255,255,0.2); color: white; }
+.top-bar{background:var(--primary);color:var(--white);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.top-bar h1{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}
+.nav-links{display:flex;gap:8px}
+.nav-link{color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;padding:5px 14px;border-radius:6px;transition:all 0.2s}
+.nav-link:hover{background:rgba(255,255,255,0.15);color:white}
+.nav-link.active{background:rgba(255,255,255,0.2);color:white}
 
 /* 统计卡片 */
-.stats-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px; padding: 20px 24px; max-width: 1600px; margin: 0 auto;
-}
-.stat-card {
-  background: var(--white); border-radius: 10px; padding: 20px;
-  box-shadow: var(--shadow); text-align: center; transition: all 0.2s;
-}
-.stat-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
-.stat-card .stat-icon { font-size: 28px; margin-bottom: 8px; }
-.stat-card .stat-num { font-size: 32px; font-weight: 700; }
-.stat-card .stat-label { font-size: 13px; color: #999; margin-top: 4px; }
-.stat-card.done { border-left: 4px solid var(--done); }
-.stat-card.done .stat-num { color: var(--done); }
-.stat-card.progress { border-left: 4px solid var(--progress); }
-.stat-card.progress .stat-num { color: #c4a017; }
-.stat-card.overdue { border-left: 4px solid var(--overdue); }
-.stat-card.overdue .stat-num { color: var(--overdue); }
-.stat-card.total { border-left: 4px solid var(--primary); }
-.stat-card.total .stat-num { color: var(--primary); }
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;padding:20px 24px;max-width:1600px;margin:0 auto}
+.stat-card{background:var(--white);border-radius:10px;padding:16px;box-shadow:var(--shadow);text-align:center;transition:all 0.2s}
+.stat-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px)}
+.stat-card .stat-icon{font-size:24px;margin-bottom:4px}
+.stat-card .stat-num{font-size:28px;font-weight:700}
+.stat-card .stat-label{font-size:12px;color:#999;margin-top:2px}
+.stat-card.progress{border-left:4px solid var(--progress)} .stat-card.progress .stat-num{color:#c4a017}
+.stat-card.done{border-left:4px solid var(--done)} .stat-card.done .stat-num{color:var(--done)}
+.stat-card.overdue{border-left:4px solid var(--overdue)} .stat-card.overdue .stat-num{color:var(--overdue)}
+.stat-card.total{border-left:4px solid var(--primary)} .stat-card.total .stat-num{color:var(--primary)}
+
+/* 甘特图 */
+.gantt-section{padding:0 24px 16px;max-width:1600px;margin:0 auto}
+.gantt-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.gantt-wrap{background:var(--white);border-radius:10px;box-shadow:var(--shadow);overflow:hidden;overflow-x:auto}
+.gantt-table{border-collapse:collapse;width:100%;font-size:12px;min-width:900px}
+.gantt-table th,.gantt-table td{border:1px solid var(--lighter);padding:0;text-align:center}
+.gantt-table thead th{background:var(--lighter);padding:8px 4px;font-weight:700;color:#666;position:sticky;top:0;z-index:1}
+.gantt-table thead th.store-col{text-align:left;padding-left:10px;min-width:120px}
+.gantt-table thead th.week-col{min-width:38px;font-size:11px}
+.gantt-table thead th.week-col.current{background:var(--primary);color:white}
+.gantt-table tbody tr:hover{background:var(--lighter)}
+.gantt-table tbody td.store-name{text-align:left;padding:6px 10px;font-weight:600;font-size:12px;white-space:nowrap;position:sticky;left:0;background:var(--white);z-index:1}
+.gantt-table tbody td.store-name .group-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
+.gantt-cell{width:100%;height:30px;display:flex;align-items:center;justify-content:center}
+.gantt-cell.has-task{cursor:pointer}
+.gantt-cell.has-task:hover{opacity:0.8}
+.gantt-dot{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;font-weight:700}
+.gantt-dot.progress{background:var(--progress);color:#666}
+.gantt-dot.done{background:var(--done)}
+.gantt-dot.overdue{background:var(--overdue)}
+.gantt-dot.todo{background:var(--todo)}
+.gantt-empty{width:20px;height:20px;border-radius:4px;background:var(--light)}
+
+/* 图例 */
+.gantt-legend{display:flex;gap:14px;font-size:12px;color:#666;margin-bottom:8px;flex-wrap:wrap}
+.gantt-legend .item{display:flex;align-items:center;gap:4px}
+.gantt-legend .dot{width:14px;height:14px;border-radius:3px}
 
 /* 周次列表 */
-.week-list { padding: 0 24px 24px; max-width: 1600px; margin: 0 auto; }
-.week-row {
-  background: var(--white); border-radius: 10px; box-shadow: var(--shadow);
-  margin-bottom: 12px; overflow: hidden; transition: all 0.2s;
-}
-.week-row:hover { box-shadow: var(--shadow-hover); }
-.week-row.current { border-left: 4px solid var(--primary); }
+.week-list{padding:0 24px 24px;max-width:1600px;margin:0 auto}
+.week-row{background:var(--white);border-radius:10px;box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden;transition:all 0.2s}
+.week-row:hover{box-shadow:var(--shadow-hover)}
+.week-row.current{border-left:4px solid var(--primary)}
+.week-header{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.2s}
+.week-header:hover{background:var(--lighter)}
+.week-info{display:flex;align-items:center;gap:14px}
+.week-num{font-size:17px;font-weight:700;color:var(--primary);min-width:50px}
+.week-date{font-size:13px;color:#999}
+.week-tag{background:var(--primary);color:white;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700}
+.week-status{display:flex;gap:8px;align-items:center}
+.week-badge{padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:4px}
+.week-badge.progress{background:#FEF9E7;color:#c4a017}
+.week-badge.done{background:#EAFAF1;color:var(--done)}
+.week-badge.overdue{background:#FDEDEC;color:var(--overdue)}
+.week-arrow{color:#ccc;transition:transform 0.2s}
+.week-row.expanded .week-arrow{transform:rotate(180deg)}
+.week-content{max-height:0;overflow:hidden;transition:max-height 0.3s ease}
+.week-row.expanded .week-content{max-height:3000px}
+.week-tasks{padding:0 20px 16px}
+.task-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--lighter)}
+.task-row:last-child{border-bottom:none}
+.task-store{font-weight:700;font-size:13px;min-width:110px;display:flex;align-items:center;gap:6px}
+.group-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.group-dot.A{background:var(--col-A)} .group-dot.B{background:var(--col-B)} .group-dot.C{background:var(--col-C)} .group-dot.D{background:var(--col-D)}
+.task-status-mini{padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;white-space:nowrap}
+.task-status-mini.progress{background:var(--progress);color:#666}
+.task-status-mini.done{background:var(--done);color:white}
+.task-status-mini.overdue{background:var(--overdue);color:white}
+.task-status-mini.todo{background:var(--todo);color:white}
+.task-summary{flex:1;font-size:12px;color:#555}
+.task-type-mini{padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;white-space:nowrap}
+.task-type-mini.short{background:#D6EAF8;color:#2471A3}
+.task-type-mini.long{background:#FDEBD0;color:#B9770E}
+.task-link{font-size:12px;color:var(--medium);text-decoration:none;padding:3px 8px;border:1px solid var(--light);border-radius:6px;transition:all 0.2s;white-space:nowrap}
+.task-link:hover{background:var(--lighter);border-color:var(--medium)}
+.empty-week{padding:20px;text-align:center;color:#999;font-size:13px}
 
-.week-header {
-  padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer; transition: background 0.2s;
-}
-.week-header:hover { background: var(--lighter); }
-.week-info { display: flex; align-items: center; gap: 16px; }
-.week-num { font-size: 18px; font-weight: 700; color: var(--primary); min-width: 60px; }
-.week-date { font-size: 13px; color: #999; }
-.week-status { display: flex; gap: 8px; align-items: center; }
-.week-badge {
-  padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;
-  display: flex; align-items: center; gap: 4px;
-}
-.week-badge.progress { background: #FEF9E7; color: #c4a017; }
-.week-badge.done { background: #EAFAF1; color: var(--done); }
-.week-badge.overdue { background: #FDEDEC; color: var(--overdue); }
-.week-badge.todo { background: #FDEDEC; color: var(--todo); }
-.week-arrow { color: #ccc; transition: transform 0.2s; }
-.week-row.expanded .week-arrow { transform: rotate(180deg); }
-
-/* 周次内容 */
-.week-content {
-  max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
-}
-.week-row.expanded .week-content { max-height: 2000px; }
-.week-tasks { padding: 0 20px 16px; }
-
-.task-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 0; border-bottom: 1px solid var(--lighter);
-}
-.task-row:last-child { border-bottom: none; }
-.task-store {
-  font-weight: 700; font-size: 14px; min-width: 120px;
-  display: flex; align-items: center; gap: 6px;
-}
-.group-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.group-dot.A { background: #3498db; }
-.group-dot.B { background: #2ecc71; }
-.group-dot.C { background: #e67e22; }
-.group-dot.D { background: #9b59b6; }
-
-.task-status-mini {
-  padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 700;
-  white-space: nowrap;
-}
-.task-status-mini.progress { background: var(--progress); color: #666; }
-.task-status-mini.done { background: var(--done); color: white; }
-.task-status-mini.overdue { background: var(--overdue); color: white; }
-.task-status-mini.todo { background: var(--todo); color: white; }
-
-.task-summary { flex: 1; font-size: 13px; color: #555; }
-.task-type-mini {
-  padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 700;
-  white-space: nowrap;
-}
-.task-type-mini.short { background: #D6EAF8; color: #2471A3; }
-.task-type-mini.long { background: #FDEBD0; color: #B9770E; }
-
-.task-link {
-  font-size: 12px; color: var(--medium); text-decoration: none;
-  padding: 4px 10px; border: 1px solid var(--light); border-radius: 6px;
-  transition: all 0.2s; white-space: nowrap;
-}
-.task-link:hover { background: var(--lighter); border-color: var(--medium); }
-
-/* 空状态 */
-.empty-week { padding: 20px; text-align: center; color: #999; font-size: 13px; }
-
-/* 响应式 */
-@media (max-width: 768px) {
-  .stats-grid { grid-template-columns: repeat(2, 1fr); padding: 12px; }
-  .stat-card { padding: 12px; }
-  .stat-card .stat-num { font-size: 24px; }
-  .week-list { padding: 0 12px 12px; }
-  .week-header { padding: 12px; flex-wrap: wrap; }
-  .week-info { flex-direction: column; align-items: flex-start; gap: 4px; }
-  .task-row { flex-wrap: wrap; gap: 6px; }
-  .task-store { min-width: 100%; }
-  .top-bar { padding: 0 12px; }
-  .top-bar .nav-links { display: none; }
+@media (max-width:768px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);padding:12px}
+  .stat-card{padding:10px} .stat-card .stat-num{font-size:22px}
+  .gantt-section,.week-list{padding:0 12px 12px}
+  .week-header{padding:10px;flex-wrap:wrap}
+  .top-bar{padding:0 12px}
+  .nav-links{display:none}
 }
 </style>
 </head>
@@ -162,30 +119,30 @@ body { font-family:'Microsoft YaHei','PingFang SC',sans-serif; background:var(--
   <div class="nav-links">
     <a class="nav-link active" href="/52week-board/">总看板</a>
     <a class="nav-link" href="/52week-board/current.html">本周看板</a>
+    <a class="nav-link" href="/52week-board/stores.html">全门店一览</a>
   </div>
 </div>
 
 <!-- 统计卡片 -->
 <div class="stats-grid">
-  <div class="stat-card progress">
-    <div class="stat-icon">⚡</div>
-    <div class="stat-num" id="totalProgress">0</div>
-    <div class="stat-label">进行中</div>
+  <div class="stat-card progress"><div class="stat-icon">⚡</div><div class="stat-num" id="totalProgress">0</div><div class="stat-label">进行中</div></div>
+  <div class="stat-card done"><div class="stat-icon">✅</div><div class="stat-num" id="totalDone">0</div><div class="stat-label">已完成</div></div>
+  <div class="stat-card overdue"><div class="stat-icon">🚨</div><div class="stat-num" id="totalOverdue">0</div><div class="stat-label">逾期</div></div>
+  <div class="stat-card total"><div class="stat-icon">📋</div><div class="stat-num" id="totalAll">0</div><div class="stat-label">总任务数</div></div>
+</div>
+
+<!-- 甘特图 -->
+<div class="gantt-section">
+  <div class="gantt-title">📅 门店跟进甘特图</div>
+  <div class="gantt-legend">
+    <div class="item"><div class="dot" style="background:var(--progress)"></div>进行中</div>
+    <div class="item"><div class="dot" style="background:var(--done)"></div>已完成</div>
+    <div class="item"><div class="dot" style="background:var(--overdue)"></div>逾期</div>
+    <div class="item"><div class="dot" style="background:var(--todo)"></div>未开始</div>
+    <div class="item"><div class="dot" style="background:var(--light)"></div>无跟进</div>
   </div>
-  <div class="stat-card done">
-    <div class="stat-icon">✅</div>
-    <div class="stat-num" id="totalDone">0</div>
-    <div class="stat-label">已完成</div>
-  </div>
-  <div class="stat-card overdue">
-    <div class="stat-icon">🚨</div>
-    <div class="stat-num" id="totalOverdue">0</div>
-    <div class="stat-label">逾期</div>
-  </div>
-  <div class="stat-card total">
-    <div class="stat-icon">📋</div>
-    <div class="stat-num" id="totalAll">0</div>
-    <div class="stat-label">总任务数</div>
+  <div class="gantt-wrap" id="ganttWrap">
+    <table class="gantt-table" id="ganttTable"></table>
   </div>
 </div>
 
@@ -194,125 +151,138 @@ body { font-family:'Microsoft YaHei','PingFang SC',sans-serif; background:var(--
 
 <script>
 // ====== 门店数据 ======
-const stores = [
-  {name:"大庆新玛特", group:"A"},{name:"红博公园", group:"A"},
-  {name:"西城红场", group:"A"},{name:"金安", group:"A"},
-  {name:"华南万象汇", group:"A"},{name:"鞍山万象汇", group:"A"},
-  {name:"沈阳三台子", group:"A"},
-  {name:"哈万象汇", group:"B"},{name:"王府井", group:"B"},
-  {name:"大庆让胡路", group:"B"},{name:"融创茂", group:"B"},
-  {name:"佳木斯万达", group:"B"},{name:"大庆万达", group:"B"},
-  {name:"沈阳万象城", group:"B"},{name:"大连甘井子", group:"B"},
-  {name:"卓展", group:"B"},
-  {name:"红旗茂", group:"C"},{name:"大庆百货大楼", group:"C"},
-  {name:"香坊万达", group:"C"},{name:"大连凯德", group:"C"},
-  {name:"沈阳盛京大奥莱", group:"C"},{name:"沈阳K11", group:"C"},
-  {name:"哈东万达", group:"D"},{name:"沈阳中海环宇城", group:"D"},
-  {name:"鞍山百盛", group:"D"},{name:"教化", group:"D"},
-  {name:"顾乡凯德", group:"D"},{name:"长春远大", group:"D"},
-  {name:"大庆乘风新玛特", group:"D"},{name:"大连凯丹", group:"D"},
+const stores=[
+  {name:"西城红场",group:"A"},{name:"金安",group:"A"},{name:"大连甘井子",group:"B"},
+  {name:"大连凯德",group:"C"},{name:"沈阳万象城",group:"B"},{name:"佳木斯万达",group:"B"},
+  {name:"香坊万达",group:"C"},
+  {name:"大庆新玛特",group:"A"},{name:"红博公园",group:"A"},{name:"华南万象汇",group:"A"},
+  {name:"鞍山万象汇",group:"A"},{name:"沈阳三台子",group:"A"},
+  {name:"哈万象汇",group:"B"},{name:"王府井",group:"B"},{name:"大庆让胡路",group:"B"},
+  {name:"融创茂",group:"B"},{name:"大庆万达",group:"B"},{name:"卓展",group:"B"},
+  {name:"红旗茂",group:"C"},{name:"大庆百货大楼",group:"C"},
+  {name:"沈阳盛京大奥莱",group:"C"},{name:"沈阳K11",group:"C"},
+  {name:"哈东万达",group:"D"},{name:"沈阳中海环宇城",group:"D"},{name:"鞍山百盛",group:"D"},
+  {name:"教化",group:"D"},{name:"顾乡凯德",group:"D"},{name:"长春远大",group:"D"},
+  {name:"大庆乘风新玛特",group:"D"},{name:"大连凯丹",group:"D"},
 ];
 
 // ====== 全部任务数据（按周次归档） ======
+// 甘特图范围：W25~W52
+const weeks = [];
+for(let i=25;i<=52;i++) weeks.push("W"+i);
+const currentWeek = "W29";
+
 const allTasks = {
   "W29": {
     date: "7月第三周 (7/15-7/21)",
     tasks: {
-      "西城红场": { status:"progress", type:"short", summary:"能力+服务两方面面临管理挑战（公司TOP1客流店）" },
-      "金安": { status:"progress", type:"short", summary:"转化率4.2→5.1；新人赵毅/老人李悦数据待提升；姜勇旭郭善勇业绩提升；拓竹0开单" },
-      "大连甘井子": { status:"progress", type:"short", summary:"全维度达成跟进，确认周环比；短板人员和项目确认；增加线下销售额" },
-      "大连凯德": { status:"progress", type:"short", summary:"业绩达成周环比；确认短板人员和项目；增加线下销售额" },
-      "沈阳万象城": { status:"progress", type:"long", summary:"人货场全维度提升（单洪崧达成+新人孙思颖）；拓竹破零；ACS达20下线" },
-      "佳木斯万达": { status:"progress", type:"long", summary:"持续关注不松懈：3PP连接率+业绩达成+新人成长+各项指标跟踪" },
-      "香坊万达": { status:"progress", type:"short", summary:"业绩达成低于哈东万达，启动调查复盘" },
+      "西城红场": {status:"progress",type:"long",summary:"能力+服务两方面面临管理挑战（公司TOP1客流店）"},
+      "金安": {status:"progress",type:"long",summary:"转化率4.2→5.1；新人赵毅/老人李悦数据待提升；姜勇旭郭善勇业绩提升；拓竹0开单"},
+      "大连甘井子": {status:"progress",type:"short",summary:"全维度达成跟进，确认周环比；短板人员和项目确认；增加线下销售额"},
+      "大连凯德": {status:"progress",type:"short",summary:"业绩达成周环比；确认短板人员和项目；增加线下销售额"},
+      "沈阳万象城": {status:"progress",type:"short",summary:"人货场全维度提升（单洪崧达成+新人孙思颖）；拓竹破零；ACS达20下线"},
+      "佳木斯万达": {status:"progress",type:"long",summary:"持续关注不松懈：3PP连接率+业绩达成+新人成长+各项指标跟踪"},
+      "香坊万达": {status:"progress",type:"short",summary:"业绩达成低于哈东万达，启动调查复盘"},
     }
   },
 };
 
-// 当前周
-const currentWeek = "W29";
-
 // ====== 状态映射 ======
-const statusLabel = {
-  progress: {label:"进行中", class:"progress"},
-  done: {label:"已完成", class:"done"},
-  overdue: {label:"逾期", class:"overdue"},
-  todo: {label:"未开始", class:"todo"},
-};
-const typeLabel = {
-  short: {label:"短期", class:"short"},
-  long: {label:"长期", class:"long"},
-};
+const statusLabel={progress:{label:"进行中",class:"progress"},done:{label:"已完成",class:"done"},overdue:{label:"逾期",class:"overdue"},todo:{label:"未开始",class:"todo"}};
+const typeLabel={short:{label:"短期",class:"short"},long:{label:"长期",class:"long"}};
+const groupColor={A:"var(--col-A)",B:"var(--col-B)",C:"var(--col-C)",D:"var(--col-D)"};
 
-// ====== 渲染 ======
-function render() {
-  let totalProgress=0, totalDone=0, totalOverdue=0, totalAll=0;
+// ====== 渲染甘特图 ======
+function renderGantt() {
+  // 按有任务优先排序：有任务的在前，无任务在后
+  const sortedStores = [...stores].sort((a,b) => {
+    const aHas = allTasks[currentWeek]?.tasks[a.name] ? 1 : 0;
+    const bHas = allTasks[currentWeek]?.tasks[b.name] ? 1 : 0;
+    return bHas - aHas;
+  });
 
-  const weekList = document.getElementById('weekList');
-  const weeks = Object.keys(allTasks).sort().reverse();
+  let html = '<thead><tr><th class="store-col">门店</th>';
+  weeks.forEach(w => {
+    const isCur = w === currentWeek;
+    html += `<th class="week-col${isCur?' current':''}">${w.replace('W','')}</th>`;
+  });
+  html += '</tr></thead><tbody>';
 
-  weekList.innerHTML = weeks.map(weekKey => {
-    const weekData = allTasks[weekKey];
-    const taskEntries = Object.entries(weekData.tasks);
-    const isCurrent = weekKey === currentWeek;
-
-    let wProgress=0, wDone=0, wOverdue=0;
-    taskEntries.forEach(([store, t]) => {
-      totalAll++;
-      if (t.status === 'progress') { wProgress++; totalProgress++; }
-      else if (t.status === 'done') { wDone++; totalDone++; }
-      else if (t.status === 'overdue') { wOverdue++; totalOverdue++; }
+  sortedStores.forEach(s => {
+    html += `<tr><td class="store-name"><span class="group-dot ${s.group}"></span>${s.name}</td>`;
+    weeks.forEach(w => {
+      const task = allTasks[w]?.tasks[s.name];
+      if (task) {
+        const st = statusLabel[task.status];
+        html += `<td><div class="gantt-cell has-task" title="${s.name} ${w} ${st.label}" onclick="window.location.href='/52week-board/current.html'"><div class="gantt-dot ${task.status}">${w.replace('W','')}</div></div></td>`;
+      } else {
+        html += '<td><div class="gantt-cell"><div class="gantt-empty"></div></div></td>';
+      }
     });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('ganttTable').innerHTML = html;
+}
 
+// ====== 渲染周次列表 ======
+function renderWeekList() {
+  let totalProgress=0,totalDone=0,totalOverdue=0,totalAll=0;
+  const weekList = document.getElementById('weekList');
+  const wKeys = Object.keys(allTasks).sort().reverse();
+
+  weekList.innerHTML = wKeys.map(wk => {
+    const wd = allTasks[wk];
+    const entries = Object.entries(wd.tasks);
+    const isCur = wk === currentWeek;
+    let wP=0,wD=0,wO=0;
+    entries.forEach(([s,t])=>{
+      totalAll++;
+      if(t.status==='progress'){wP++;totalProgress++}
+      else if(t.status==='done'){wD++;totalDone++}
+      else if(t.status==='overdue'){wO++;totalOverdue++}
+    });
     return `
-    <div class="week-row ${isCurrent ? 'current' : ''} ${isCurrent ? 'expanded' : ''}" onclick="toggleWeek(this)">
+    <div class="week-row ${isCur?'current':''} ${isCur?'expanded':''}" onclick="toggleWeek(this)">
       <div class="week-header">
         <div class="week-info">
-          <span class="week-num">${weekKey}</span>
-          <span class="week-date">${weekData.date}</span>
-          ${isCurrent ? '<span style="background:var(--primary);color:white;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700;">本周</span>' : ''}
+          <span class="week-num">${wk}</span>
+          <span class="week-date">${wd.date}</span>
+          ${isCur?'<span class="week-tag">本周</span>':''}
         </div>
         <div class="week-status">
-          ${wProgress > 0 ? `<span class="week-badge progress">⚡ 进行中 ${wProgress}</span>` : ''}
-          ${wDone > 0 ? `<span class="week-badge done">✅ 已完成 ${wDone}</span>` : ''}
-          ${wOverdue > 0 ? `<span class="week-badge overdue">🚨 逾期 ${wOverdue}</span>` : ''}
+          ${wP?`<span class="week-badge progress">⚡ 进行中 ${wP}</span>`:''}
+          ${wD?`<span class="week-badge done">✅ 已完成 ${wD}</span>`:''}
+          ${wO?`<span class="week-badge overdue">🚨 逾期 ${wO}</span>`:''}
           <span class="week-arrow">▼</span>
         </div>
       </div>
-      <div class="week-content">
-        <div class="week-tasks">
-          ${taskEntries.map(([store, t]) => {
-            const storeInfo = stores.find(s => s.name === store) || {group:'?'};
-            const st = statusLabel[t.status];
-            const tp = typeLabel[t.type];
-            return `
-            <div class="task-row">
-              <div class="task-store">
-                <span class="group-dot ${storeInfo.group}"></span>
-                ${store}
-              </div>
-              <span class="task-status-mini ${st.class}">${st.label}</span>
-              <span class="task-type-mini ${tp.class}">${tp.label}</span>
-              <div class="task-summary">${t.summary}</div>
-              <a class="task-link" href="/52week-board/current.html">查看详情 →</a>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>
+      <div class="week-content"><div class="week-tasks">
+        ${entries.map(([store,t])=>{
+          const si = stores.find(s=>s.name===store)||{group:'?'};
+          const st = statusLabel[t.status];
+          const tp = typeLabel[t.type];
+          return `<div class="task-row">
+            <div class="task-store"><span class="group-dot ${si.group}"></span>${store}</div>
+            <span class="task-status-mini ${st.class}">${st.label}</span>
+            <span class="task-type-mini ${tp.class}">${tp.label}</span>
+            <div class="task-summary">${t.summary}</div>
+            <a class="task-link" href="/52week-board/current.html">查看详情 →</a>
+          </div>`;
+        }).join('')}
+      </div></div>
     </div>`;
   }).join('');
 
-  document.getElementById('totalProgress').textContent = totalProgress;
-  document.getElementById('totalDone').textContent = totalDone;
-  document.getElementById('totalOverdue').textContent = totalOverdue;
-  document.getElementById('totalAll').textContent = totalAll;
+  document.getElementById('totalProgress').textContent=totalProgress;
+  document.getElementById('totalDone').textContent=totalDone;
+  document.getElementById('totalOverdue').textContent=totalOverdue;
+  document.getElementById('totalAll').textContent=totalAll;
 }
 
-function toggleWeek(el) {
-  el.classList.toggle('expanded');
-}
-
-render();
+function toggleWeek(el){el.classList.toggle('expanded')}
+renderGantt();
+renderWeekList();
 </script>
 </body>
 </html>
