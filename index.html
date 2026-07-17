@@ -13,6 +13,7 @@
   --col-A:#3498db; --col-B:#2ecc71; --col-C:#e67e22; --col-D:#9b59b6;
   /* 板块色 */
   --ops:#2D5F4E; --training:#2C6FAB; --academy:#8E44AD; --office:#D4A017;
+  --meeting:#C0392B;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
@@ -31,6 +32,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .board-tab:hover{color:var(--dark);background:var(--lighter)}
 .board-tab.active{font-weight:700}
 .board-tab.active[data-board="ops"]{color:var(--ops);border-bottom-color:var(--ops)}
+.board-tab.active[data-board="meeting"]{color:var(--meeting);border-bottom-color:var(--meeting)}
 .board-tab.active[data-board="training"]{color:var(--training);border-bottom-color:var(--training)}
 .board-tab.active[data-board="academy"]{color:var(--academy);border-bottom-color:var(--academy)}
 .board-tab.active[data-board="office"]{color:var(--office);border-bottom-color:var(--office)}
@@ -85,9 +87,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .gantt-dot.overdue{background:var(--overdue)}
 .gantt-dot.todo{background:var(--todo)}
 .gantt-dot.board-ops{background:var(--ops)}
-.gantt-dot.board-training{background:var(--training)}
-.gantt-dot.board-academy{background:var(--academy)}
-.gantt-dot.board-office{background:var(--office)}
+.gantt-dot.board-meeting{background:var(--meeting)}
 .gantt-empty{width:20px;height:20px;border-radius:4px;background:var(--light)}
 
 /* 图例 */
@@ -137,9 +137,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 /* 板块标签 */
 .board-tag{font-size:10px;padding:1px 6px;border-radius:6px;font-weight:700;white-space:nowrap;color:white}
 .board-tag.ops{background:var(--ops)}
-.board-tag.training{background:var(--training)}
-.board-tag.academy{background:var(--academy)}
-.board-tag.office{background:var(--office)}
+.board-tag.meeting{background:var(--meeting)}
 
 @media (max-width:768px){
   .stats-grid{grid-template-columns:repeat(2,1fr);padding:12px}
@@ -169,9 +167,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 <!-- 板块Tab栏 -->
 <div class="board-tabs" id="boardTabs">
   <div class="board-tab active" data-board="ops" onclick="switchBoard('ops')">📋 运营</div>
-  <div class="board-tab" data-board="training" onclick="switchBoard('training')">🎓 培训</div>
-  <div class="board-tab" data-board="academy" onclick="switchBoard('academy')">📚 管理学院</div>
-  <div class="board-tab" data-board="office" onclick="switchBoard('office')">🏢 总经办</div>
+  <div class="board-tab" data-board="meeting" onclick="switchBoard('meeting')">📝 会议落实</div>
 </div>
 
 <!-- 统计卡片 -->
@@ -185,9 +181,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 <!-- 各板块进行中任务数统计 -->
 <div class="board-stats-grid">
   <div class="board-stat-card" data-board="ops" onclick="switchBoard('ops')"><div class="bs-icon">📋</div><div class="bs-num" id="opsCount">0</div><div class="bs-label">运营</div></div>
-  <div class="board-stat-card" data-board="training" onclick="switchBoard('training')"><div class="bs-icon">🎓</div><div class="bs-num" id="trainingCount">0</div><div class="bs-label">培训</div></div>
-  <div class="board-stat-card" data-board="academy" onclick="switchBoard('academy')"><div class="bs-icon">📚</div><div class="bs-num" id="academyCount">0</div><div class="bs-label">管理学院</div></div>
-  <div class="board-stat-card" data-board="office" onclick="switchBoard('office')"><div class="bs-icon">🏢</div><div class="bs-num" id="officeCount">0</div><div class="bs-label">总经办</div></div>
+  <div class="board-stat-card" data-board="meeting" onclick="switchBoard('meeting')"><div class="bs-icon">📝</div><div class="bs-num" id="meetingCount">0</div><div class="bs-label">会议落实</div></div>
 </div>
 
 <!-- 甘特图 -->
@@ -200,9 +194,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
     <div class="item"><div class="dot" style="background:var(--todo)"></div>未开始</div>
     <div class="item"><div class="dot" style="background:var(--light)"></div>无跟进</div>
     <div class="item"><div class="dot" style="background:var(--ops)"></div>运营</div>
-    <div class="item"><div class="dot" style="background:var(--training)"></div>培训</div>
-    <div class="item"><div class="dot" style="background:var(--academy)"></div>管理学院</div>
-    <div class="item"><div class="dot" style="background:var(--office)"></div>总经办</div>
+    <div class="item"><div class="dot" style="background:var(--meeting)"></div>会议落实</div>
   </div>
   <div class="gantt-wrap" id="ganttWrap">
     <table class="gantt-table" id="ganttTable"></table>
@@ -229,28 +221,8 @@ const stores=[
   {name:"大庆乘风新玛特",group:"D"},{name:"大连凯丹",group:"D"},
 ];
 
-// ====== 培训板块数据 ======
-const trainingItems = [
-  {name:"新人培训跟踪",trainer:"培训师1"},
-  {name:"3PP配件培训",trainer:"培训师2"},
-  {name:"3331服务行为规范",trainer:"培训师3"},
-  {name:"Coach项目管理",trainer:"培训师4"},
-];
-
-// ====== 管理学院板块数据 ======
-const academyItems = [
-  {name:"精英训练营"},
-  {name:"储备管理"},
-  {name:"调动店长"},
-  {name:"专项提升"},
-];
-
-// ====== 总经办板块数据 ======
-const officeItems = [
-  {name:"紧急任务"},
-  {name:"重要任务"},
-  {name:"一般任务"},
-];
+// 会议落实板块数据（30家门店）
+const meetingItems = stores.map(s => ({name:s.name, group:s.group}));
 
 // ====== 全部任务数据（按周次归档） ======
 const weeks = [];
@@ -276,6 +248,7 @@ const allTasks = {
 // ====== 板块配置 ======
 const boardConfig = {
   ops: {name:"运营",color:"var(--ops)",icon:"📋",items:stores.map(s=>({name:s.name,group:s.group}))},
+  meeting: {name:"会议落实",color:"var(--meeting)",icon:"📝",items:meetingItems},
 };
 
 // ====== 状态映射 ======
@@ -341,7 +314,7 @@ function renderGantt() {
 // ====== 渲染周次列表 ======
 function renderWeekList() {
   let totalProgress=0,totalDone=0,totalOverdue=0,totalAll=0;
-  let opsCount=0,trainingCount=0,academyCount=0,officeCount=0;
+  let opsCount=0,meetingCount=0;
   const weekList = document.getElementById('weekList');
   const wKeys = Object.keys(allTasks).sort().reverse();
 
@@ -357,9 +330,7 @@ function renderWeekList() {
     allEntries.forEach(([s,t])=>{
       totalAll++;
       if(t.board==='ops' && t.status==='progress') opsCount++;
-      if(t.board==='training' && t.status==='progress') trainingCount++;
-      if(t.board==='academy' && t.status==='progress') academyCount++;
-      if(t.board==='office' && t.status==='progress') officeCount++;
+      if(t.board==='meeting' && t.status==='progress') meetingCount++;
       if(t.status==='progress'){wP++;totalProgress++}
       else if(t.status==='done'){wD++;totalDone++}
       else if(t.status==='overdue'){wO++;totalOverdue++}
@@ -430,9 +401,7 @@ function renderWeekList() {
   document.getElementById('totalOverdue').textContent=totalOverdue;
   document.getElementById('totalAll').textContent=totalAll;
   document.getElementById('opsCount').textContent=opsCount;
-  document.getElementById('trainingCount').textContent=trainingCount;
-  document.getElementById('academyCount').textContent=academyCount;
-  document.getElementById('officeCount').textContent=officeCount;
+  document.getElementById('meetingCount').textContent=meetingCount;
 }
 
 function toggleWeek(el){el.classList.toggle('expanded')}

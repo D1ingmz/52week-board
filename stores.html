@@ -13,6 +13,7 @@
   --col-A:#3498db; --col-B:#2ecc71; --col-C:#e67e22; --col-D:#9b59b6;
   /* 板块色 */
   --ops:#2D5F4E; --training:#2C6FAB; --academy:#8E44AD; --office:#D4A017;
+  --meeting:#C0392B;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
@@ -30,6 +31,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .board-tab:hover{color:var(--dark);background:var(--lighter)}
 .board-tab.active{font-weight:700}
 .board-tab.active[data-board="ops"]{color:var(--ops);border-bottom-color:var(--ops)}
+.board-tab.active[data-board="meeting"]{color:var(--meeting);border-bottom-color:var(--meeting)}
 
 .filter-bar{background:var(--white);padding:10px 24px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--light);flex-wrap:wrap;position:sticky;top:112px;z-index:50}
 .search-box{padding:6px 12px;border:2px solid var(--light);border-radius:20px;font-size:13px;width:200px;transition:all 0.2s;outline:none}
@@ -115,6 +117,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 <!-- 板块Tab栏 -->
 <div class="board-tabs" id="boardTabs">
   <div class="board-tab active" data-board="ops" onclick="switchBoard('ops')">📋 运营</div>
+  <div class="board-tab" data-board="meeting" onclick="switchBoard('meeting')">📝 会议落实</div>
 </div>
 
 <!-- 运营板块内容 -->
@@ -198,6 +201,7 @@ let currentBoard='ops';
 
 const boardConfig = {
   ops: {name:"运营",icon:"📋"},
+  meeting: {name:"会议落实",icon:"📝"},
 };
 
 function switchBoard(board) {

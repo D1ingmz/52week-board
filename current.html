@@ -14,6 +14,7 @@
   --col-A:#3498db; --col-B:#2ecc71; --col-C:#e67e22; --col-D:#9b59b6;
   /* 板块色 */
   --ops:#2D5F4E; --training:#2C6FAB; --academy:#8E44AD; --office:#D4A017;
+  --meeting:#C0392B;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
@@ -31,6 +32,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .board-tab:hover{color:var(--dark);background:var(--lighter)}
 .board-tab.active{font-weight:700}
 .board-tab.active[data-board="ops"]{color:var(--ops);border-bottom-color:var(--ops)}
+.board-tab.active[data-board="meeting"]{color:var(--meeting);border-bottom-color:var(--meeting)}
 
 /* 趋势图区 */
 .trend-section{padding:16px 24px;max-width:1600px;margin:0 auto}
@@ -182,6 +184,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 <!-- 板块Tab栏 -->
 <div class="board-tabs" id="boardTabs">
   <div class="board-tab active" data-board="ops" onclick="switchBoard('ops')">📋 运营</div>
+  <div class="board-tab" data-board="meeting" onclick="switchBoard('meeting')">📝 会议落实</div>
 </div>
 
 <!-- 趋势图 -->
@@ -190,8 +193,8 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
   <div class="trend-chart">
     <div class="trend-bars" id="trendBars"></div>
     <div class="trend-summary" id="trendSummary"></div>
-    <!-- 四板块堆叠柱状图 -->
-    <div class="trend-stacked-title">🏷️ 四板块任务分布</div>
+    <!-- 板块堆叠柱状图 -->
+    <div class="trend-stacked-title">🏷️ 板块任务分布</div>
     <div class="trend-stacked" id="trendStacked"></div>
     <div class="trend-stacked-legend">
       <div class="item"><div class="dot" style="background:var(--ops)"></div>运营</div>
@@ -327,6 +330,7 @@ const typeMap={short:{label:"短期",class:"short"},long:{label:"长期",class:"
 // ====== 板块配置 ======
 const boardConfig = {
   ops: {name:"运营",icon:"📋",color:"var(--ops)"},
+  meeting: {name:"会议落实",icon:"📝",color:"var(--meeting)"},
 };
 
 let currentBoard = 'ops';
@@ -415,7 +419,11 @@ function renderStackedTrend() {
 // ====== 渲染看板 ======
 function render() {
   const board = document.getElementById('board');
-  renderOpsBoard(board);
+  if (currentBoard === 'meeting') {
+    renderMeetingBoard(board);
+  } else {
+    renderOpsBoard(board);
+  }
 }
 
 // ====== 运营板块渲染 ======
@@ -499,12 +507,85 @@ function renderNoTaskCard(s) {
   </div>`;
 }
 
-// 培训/管理学院/总经办渲染函数已移除
+// ====== 会议落实数据（30家门店）======
+// 格式：门店名 -> {summary:"本周会议摘要", items:["要点1","要点2"], date:"日期"}
+// 用户每周传一次表格，AI筒练总结后填入
+const meetingData = {
+  // 示例占位，后续用户传表格后填入真实数据
+};
 
 function toggleExpand(card){card.classList.toggle('expanded')}
 function toggleNoTask(){noTaskExpanded=!noTaskExpanded;document.getElementById('noTaskBoard').classList.toggle('show',noTaskExpanded);document.getElementById('toggleBtn').textContent=noTaskExpanded?'收起 ▲':'展开 ▼'}
 function filterView(view){currentView=view;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));event.target.closest('.filter-btn').classList.add('active');noTaskExpanded=false;document.getElementById('noTaskBoard').classList.remove('show');document.getElementById('toggleBtn').textContent='展开 ▼';render()}
 function handleSearch(){searchTerm=document.getElementById('searchBox').value.trim();render()}
+
+// ====== 会议落实板块渲染 ======
+function renderMeetingBoard(board) {
+  const hasData = Object.keys(meetingData).length > 0;
+  
+  // 搜索过滤
+  let filteredStores = stores;
+  if (searchTerm) {
+    filteredStores = stores.filter(s => s.name.includes(searchTerm));
+  } else if (currentView !== 'focus' && currentView !== 'all') {
+    filteredStores = stores.filter(s => s.group === currentView);
+  } else if (currentView === 'focus') {
+    filteredStores = stores.filter(s => meetingData[s.name]);
+  }
+
+  const withMeeting = filteredStores.filter(s => meetingData[s.name]);
+  const withoutMeeting = filteredStores.filter(s => !meetingData[s.name]);
+
+  document.getElementById('taskCount').textContent = withMeeting.length;
+  document.getElementById('noTaskCount').textContent = withoutMeeting.length;
+
+  if (withMeeting.length === 0) {
+    board.innerHTML = '<div class="empty-state"><div style="font-size:36px;">📝</div><p>暂无会议落实数据</p><p style="font-size:13px;color:#999;margin-top:8px;">每周传表格后由AI总结填入</p></div>';
+  } else {
+    board.innerHTML = withMeeting.map(s => renderMeetingCard(s)).join('');
+  }
+
+  const noBoard = document.getElementById('noTaskBoard');
+  noBoard.innerHTML = withoutMeeting.map(s => `
+    <div class="store-card no-task group-${s.group}">
+      <div class="card-header">
+        <span class="store-name">${s.name}</span>
+        <span class="group-tag g-${s.group}">${s.group}组</span>
+      </div>
+      <div class="card-body"><div class="content" style="color:#999;">暂无会议记录</div></div>
+    </div>
+  `).join('');
+}
+
+function renderMeetingCard(s) {
+  const m = meetingData[s.name];
+  const groupDot = `<span class="group-tag g-${s.group}">${s.group}组</span>`;
+  const itemsHtml = (m.items||[]).map(item => `<div class="meeting-item">• ${item}</div>`).join('');
+  return `
+  <div class="store-card group-${s.group}" onclick="toggleExpand(this)">
+    <div class="card-header">
+      <span class="store-name">${s.name}</span>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span class="meeting-date-badge">📅 ${m.date||'—'}</span>
+        ${groupDot}
+      </div>
+    </div>
+    <div class="card-status-bar">
+      <span class="status-badge progress" style="background:var(--meeting);color:white;">📝 会议落实</span>
+    </div>
+    <div class="card-body">
+      <div class="label">会议摘要</div>
+      <div class="content">${m.summary||'—'}</div>
+      ${itemsHtml ? `<div class="label">关键要点</div><div class="content">${itemsHtml}</div>` : ''}
+    </div>
+    <div class="card-expand">
+      <div class="card-expand-content">
+        <div class="expand-row"><span class="e-label">记录日期</span><span class="e-val">${m.date||'—'}</span></div>
+        <div class="expand-row"><span class="e-label">原始摘要</span><span class="e-val">${m.summary||'—'}</span></div>
+      </div>
+    </div>
+  </div>`;
+}
 
 renderTrend();
 render();
