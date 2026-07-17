@@ -11,6 +11,8 @@
   --done:#27AE60; --progress:#F1C40F; --todo:#E74C3C; --overdue:#8B0000;
   --shadow:0 2px 8px rgba(0,0,0,0.08); --shadow-hover:0 4px 16px rgba(0,0,0,0.12);
   --col-A:#3498db; --col-B:#2ecc71; --col-C:#e67e22; --col-D:#9b59b6;
+  /* 板块色 */
+  --ops:#2D5F4E; --training:#2C6FAB; --academy:#8E44AD; --office:#D4A017;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
@@ -23,6 +25,16 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .nav-link:hover{background:rgba(255,255,255,0.15);color:white}
 .nav-link.active{background:rgba(255,255,255,0.2);color:white}
 
+/* 板块Tab栏 */
+.board-tabs{display:flex;background:var(--white);border-bottom:2px solid var(--lighter);padding:0 24px;position:sticky;top:56px;z-index:99;overflow-x:auto}
+.board-tab{padding:10px 20px;font-size:14px;font-weight:600;color:#888;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.board-tab:hover{color:var(--dark);background:var(--lighter)}
+.board-tab.active{font-weight:700}
+.board-tab.active[data-board="ops"]{color:var(--ops);border-bottom-color:var(--ops)}
+.board-tab.active[data-board="training"]{color:var(--training);border-bottom-color:var(--training)}
+.board-tab.active[data-board="academy"]{color:var(--academy);border-bottom-color:var(--academy)}
+.board-tab.active[data-board="office"]{color:var(--office);border-bottom-color:var(--office)}
+
 /* 统计卡片 */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;padding:20px 24px;max-width:1600px;margin:0 auto}
 .stat-card{background:var(--white);border-radius:10px;padding:16px;box-shadow:var(--shadow);text-align:center;transition:all 0.2s}
@@ -34,6 +46,22 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .stat-card.done{border-left:4px solid var(--done)} .stat-card.done .stat-num{color:var(--done)}
 .stat-card.overdue{border-left:4px solid var(--overdue)} .stat-card.overdue .stat-num{color:var(--overdue)}
 .stat-card.total{border-left:4px solid var(--primary)} .stat-card.total .stat-num{color:var(--primary)}
+
+/* 板块统计行 */
+.board-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:0 24px 16px;max-width:1600px;margin:0 auto}
+.board-stat-card{background:var(--white);border-radius:10px;padding:14px;box-shadow:var(--shadow);text-align:center;transition:all 0.2s;cursor:pointer;border-top:4px solid var(--primary)}
+.board-stat-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px)}
+.board-stat-card[data-board="ops"]{border-top-color:var(--ops)}
+.board-stat-card[data-board="training"]{border-top-color:var(--training)}
+.board-stat-card[data-board="academy"]{border-top-color:var(--academy)}
+.board-stat-card[data-board="office"]{border-top-color:var(--office)}
+.board-stat-card .bs-icon{font-size:20px;margin-bottom:2px}
+.board-stat-card .bs-num{font-size:24px;font-weight:700}
+.board-stat-card[data-board="ops"] .bs-num{color:var(--ops)}
+.board-stat-card[data-board="training"] .bs-num{color:var(--training)}
+.board-stat-card[data-board="academy"] .bs-num{color:var(--academy)}
+.board-stat-card[data-board="office"] .bs-num{color:var(--office)}
+.board-stat-card .bs-label{font-size:11px;color:#999;margin-top:2px}
 
 /* 甘特图 */
 .gantt-section{padding:0 24px 16px;max-width:1600px;margin:0 auto}
@@ -56,6 +84,10 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .gantt-dot.done{background:var(--done)}
 .gantt-dot.overdue{background:var(--overdue)}
 .gantt-dot.todo{background:var(--todo)}
+.gantt-dot.board-ops{background:var(--ops)}
+.gantt-dot.board-training{background:var(--training)}
+.gantt-dot.board-academy{background:var(--academy)}
+.gantt-dot.board-office{background:var(--office)}
 .gantt-empty{width:20px;height:20px;border-radius:4px;background:var(--light)}
 
 /* 图例 */
@@ -82,7 +114,7 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .week-arrow{color:#ccc;transition:transform 0.2s}
 .week-row.expanded .week-arrow{transform:rotate(180deg)}
 .week-content{max-height:0;overflow:hidden;transition:max-height 0.3s ease}
-.week-row.expanded .week-content{max-height:3000px}
+.week-row.expanded .week-content{max-height:5000px}
 .week-tasks{padding:0 20px 16px}
 .task-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--lighter)}
 .task-row:last-child{border-bottom:none}
@@ -102,13 +134,24 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .task-link:hover{background:var(--lighter);border-color:var(--medium)}
 .empty-week{padding:20px;text-align:center;color:#999;font-size:13px}
 
+/* 板块标签 */
+.board-tag{font-size:10px;padding:1px 6px;border-radius:6px;font-weight:700;white-space:nowrap;color:white}
+.board-tag.ops{background:var(--ops)}
+.board-tag.training{background:var(--training)}
+.board-tag.academy{background:var(--academy)}
+.board-tag.office{background:var(--office)}
+
 @media (max-width:768px){
   .stats-grid{grid-template-columns:repeat(2,1fr);padding:12px}
+  .board-stats-grid{grid-template-columns:repeat(2,1fr);padding:0 12px 12px}
   .stat-card{padding:10px} .stat-card .stat-num{font-size:22px}
+  .board-stat-card{padding:10px} .board-stat-card .bs-num{font-size:20px}
   .gantt-section,.week-list{padding:0 12px 12px}
   .week-header{padding:10px;flex-wrap:wrap}
   .top-bar{padding:0 12px}
   .nav-links{display:none}
+  .board-tabs{padding:0 12px}
+  .board-tab{padding:8px 14px;font-size:13px}
 }
 </style>
 </head>
@@ -123,6 +166,14 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
   </div>
 </div>
 
+<!-- 板块Tab栏 -->
+<div class="board-tabs" id="boardTabs">
+  <div class="board-tab active" data-board="ops" onclick="switchBoard('ops')">📋 运营</div>
+  <div class="board-tab" data-board="training" onclick="switchBoard('training')">🎓 培训</div>
+  <div class="board-tab" data-board="academy" onclick="switchBoard('academy')">📚 管理学院</div>
+  <div class="board-tab" data-board="office" onclick="switchBoard('office')">🏢 总经办</div>
+</div>
+
 <!-- 统计卡片 -->
 <div class="stats-grid">
   <div class="stat-card progress"><div class="stat-icon">⚡</div><div class="stat-num" id="totalProgress">0</div><div class="stat-label">进行中</div></div>
@@ -131,15 +182,27 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
   <div class="stat-card total"><div class="stat-icon">📋</div><div class="stat-num" id="totalAll">0</div><div class="stat-label">总任务数</div></div>
 </div>
 
+<!-- 各板块进行中任务数统计 -->
+<div class="board-stats-grid">
+  <div class="board-stat-card" data-board="ops" onclick="switchBoard('ops')"><div class="bs-icon">📋</div><div class="bs-num" id="opsCount">0</div><div class="bs-label">运营</div></div>
+  <div class="board-stat-card" data-board="training" onclick="switchBoard('training')"><div class="bs-icon">🎓</div><div class="bs-num" id="trainingCount">0</div><div class="bs-label">培训</div></div>
+  <div class="board-stat-card" data-board="academy" onclick="switchBoard('academy')"><div class="bs-icon">📚</div><div class="bs-num" id="academyCount">0</div><div class="bs-label">管理学院</div></div>
+  <div class="board-stat-card" data-board="office" onclick="switchBoard('office')"><div class="bs-icon">🏢</div><div class="bs-num" id="officeCount">0</div><div class="bs-label">总经办</div></div>
+</div>
+
 <!-- 甘特图 -->
 <div class="gantt-section">
-  <div class="gantt-title">📅 门店跟进甘特图</div>
+  <div class="gantt-title">📅 任务跟进甘特图 — <span id="ganttBoardName">运营板块</span></div>
   <div class="gantt-legend">
     <div class="item"><div class="dot" style="background:var(--progress)"></div>进行中</div>
     <div class="item"><div class="dot" style="background:var(--done)"></div>已完成</div>
     <div class="item"><div class="dot" style="background:var(--overdue)"></div>逾期</div>
     <div class="item"><div class="dot" style="background:var(--todo)"></div>未开始</div>
     <div class="item"><div class="dot" style="background:var(--light)"></div>无跟进</div>
+    <div class="item"><div class="dot" style="background:var(--ops)"></div>运营</div>
+    <div class="item"><div class="dot" style="background:var(--training)"></div>培训</div>
+    <div class="item"><div class="dot" style="background:var(--academy)"></div>管理学院</div>
+    <div class="item"><div class="dot" style="background:var(--office)"></div>总经办</div>
   </div>
   <div class="gantt-wrap" id="ganttWrap">
     <table class="gantt-table" id="ganttTable"></table>
@@ -166,8 +229,33 @@ const stores=[
   {name:"大庆乘风新玛特",group:"D"},{name:"大连凯丹",group:"D"},
 ];
 
+// ====== 培训板块数据 ======
+const trainingItems = [
+  {name:"新人培训跟踪",trainer:"培训师1"},
+  {name:"3PP配件培训",trainer:"培训师2"},
+  {name:"3331服务行为规范",trainer:"培训师3"},
+  {name:"Coach项目管理",trainer:"培训师4"},
+];
+
+// ====== 管理学院板块数据 ======
+const academyItems = [
+  {name:"店长1573模型"},
+  {name:"管理层5+5模型"},
+  {name:"目标-任务-执行"},
+  {name:"管理者画像"},
+  {name:"文化考核体系"},
+];
+
+// ====== 总经办板块数据 ======
+const officeItems = [
+  {name:"招聘筛选标准"},
+  {name:"面试题库复盘"},
+  {name:"季度合规评估"},
+  {name:"制度修订发布"},
+  {name:"专项事件处理"},
+];
+
 // ====== 全部任务数据（按周次归档） ======
-// 甘特图范围：W25~W52
 const weeks = [];
 for(let i=25;i<=52;i++) weeks.push("W"+i);
 const currentWeek = "W29";
@@ -176,15 +264,41 @@ const allTasks = {
   "W29": {
     date: "7月第三周 (7/15-7/21)",
     tasks: {
-      "西城红场": {status:"progress",type:"long",summary:"能力+服务两方面面临管理挑战（公司TOP1客流店）"},
-      "金安": {status:"progress",type:"long",summary:"转化率4.2→5.1；新人赵毅/老人李悦数据待提升；姜勇旭郭善勇业绩提升；拓竹0开单"},
-      "大连甘井子": {status:"progress",type:"short",summary:"全维度达成跟进，确认周环比；短板人员和项目确认；增加线下销售额"},
-      "大连凯德": {status:"progress",type:"short",summary:"业绩达成周环比；确认短板人员和项目；增加线下销售额"},
-      "沈阳万象城": {status:"progress",type:"short",summary:"人货场全维度提升（单洪崧达成+新人孙思颖）；拓竹破零；ACS达20下线"},
-      "佳木斯万达": {status:"progress",type:"long",summary:"持续关注不松懈：3PP连接率+业绩达成+新人成长+各项指标跟踪"},
-      "香坊万达": {status:"progress",type:"short",summary:"业绩达成低于哈东万达，启动调查复盘"},
+      // 运营板块
+      "西城红场": {board:"ops",status:"progress",type:"long",summary:"能力+服务两方面面临管理挑战（公司TOP1客流店）"},
+      "金安": {board:"ops",status:"progress",type:"long",summary:"转化率4.2→5.1；新人赵毅/老人李悦数据待提升；姜勇旭郭善勇业绩提升；拓竹0开单"},
+      "大连甘井子": {board:"ops",status:"progress",type:"short",summary:"全维度达成跟进，确认周环比；短板人员和项目确认；增加线下销售额"},
+      "大连凯德": {board:"ops",status:"progress",type:"short",summary:"业绩达成周环比；确认短板人员和项目；增加线下销售额"},
+      "沈阳万象城": {board:"ops",status:"progress",type:"short",summary:"人货场全维度提升（单洪崧达成+新人孙思颖）；拓竹破零；ACS达20下线"},
+      "佳木斯万达": {board:"ops",status:"progress",type:"long",summary:"持续关注不松懈：3PP连接率+业绩达成+新人成长+各项指标跟踪"},
+      "香坊万达": {board:"ops",status:"progress",type:"short",summary:"业绩达成低于哈东万达，启动调查复盘"},
+      // 培训板块
+      "新人培训跟踪": {board:"training",status:"todo",type:"long",summary:"待录入"},
+      "3PP配件培训": {board:"training",status:"todo",type:"long",summary:"待录入"},
+      "3331服务行为规范": {board:"training",status:"todo",type:"long",summary:"待录入"},
+      "Coach项目管理": {board:"training",status:"todo",type:"long",summary:"待录入"},
+      // 管理学院板块
+      "店长1573模型": {board:"academy",status:"todo",type:"long",summary:"待录入"},
+      "管理层5+5模型": {board:"academy",status:"todo",type:"long",summary:"待录入"},
+      "目标-任务-执行": {board:"academy",status:"todo",type:"long",summary:"待录入"},
+      "管理者画像": {board:"academy",status:"todo",type:"long",summary:"待录入"},
+      "文化考核体系": {board:"academy",status:"todo",type:"long",summary:"待录入"},
+      // 总经办板块
+      "招聘筛选标准": {board:"office",status:"todo",type:"long",summary:"待录入"},
+      "面试题库复盘": {board:"office",status:"todo",type:"long",summary:"待录入"},
+      "季度合规评估": {board:"office",status:"todo",type:"long",summary:"待录入"},
+      "制度修订发布": {board:"office",status:"todo",type:"long",summary:"待录入"},
+      "专项事件处理": {board:"office",status:"todo",type:"long",summary:"待录入"},
     }
   },
+};
+
+// ====== 板块配置 ======
+const boardConfig = {
+  ops: {name:"运营板块",color:"var(--ops)",icon:"📋",items:stores.map(s=>({name:s.name,group:s.group}))},
+  training: {name:"培训板块",color:"var(--training)",icon:"🎓",items:trainingItems},
+  academy: {name:"管理学院板块",color:"var(--academy)",icon:"📚",items:academyItems},
+  office: {name:"总经办板块",color:"var(--office)",icon:"🏢",items:officeItems},
 };
 
 // ====== 状态映射 ======
@@ -192,29 +306,51 @@ const statusLabel={progress:{label:"进行中",class:"progress"},done:{label:"�
 const typeLabel={short:{label:"短期",class:"short"},long:{label:"长期",class:"long"}};
 const groupColor={A:"var(--col-A)",B:"var(--col-B)",C:"var(--col-C)",D:"var(--col-D)"};
 
+// ====== 当前板块 ======
+let currentBoard = 'ops';
+
+// ====== 切换板块 ======
+function switchBoard(board) {
+  currentBoard = board;
+  // 更新Tab高亮
+  document.querySelectorAll('.board-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.board === board);
+  });
+  // 更新甘特图标题
+  document.getElementById('ganttBoardName').textContent = boardConfig[board].name;
+  renderGantt();
+  renderWeekList();
+}
+
 // ====== 渲染甘特图 ======
 function renderGantt() {
-  // 按有任务优先排序：有任务的在前，无任务在后
-  const sortedStores = [...stores].sort((a,b) => {
+  const config = boardConfig[currentBoard];
+  const items = config.items;
+
+  // 按有任务优先排序
+  const sortedItems = [...items].sort((a,b) => {
     const aHas = allTasks[currentWeek]?.tasks[a.name] ? 1 : 0;
     const bHas = allTasks[currentWeek]?.tasks[b.name] ? 1 : 0;
     return bHas - aHas;
   });
 
-  let html = '<thead><tr><th class="store-col">门店</th>';
+  let html = '<thead><tr><th class="store-col">' + (currentBoard==='ops' ? '门店' : '任务主体') + '</th>';
   weeks.forEach(w => {
     const isCur = w === currentWeek;
     html += `<th class="week-col${isCur?' current':''}">${w.replace('W','')}</th>`;
   });
   html += '</tr></thead><tbody>';
 
-  sortedStores.forEach(s => {
-    html += `<tr><td class="store-name"><span class="group-dot ${s.group}"></span>${s.name}</td>`;
+  sortedItems.forEach(s => {
+    const groupDot = s.group ? `<span class="group-dot ${s.group}"></span>` : '';
+    html += `<tr><td class="store-name">${groupDot}${s.name}</td>`;
     weeks.forEach(w => {
       const task = allTasks[w]?.tasks[s.name];
       if (task) {
         const st = statusLabel[task.status];
-        html += `<td><div class="gantt-cell has-task" title="${s.name} ${w} ${st.label}" onclick="window.location.href='/52week-board/current.html'"><div class="gantt-dot ${task.status}">${w.replace('W','')}</div></div></td>`;
+        // 使用板块色甘特图格子
+        const dotClass = `board-${task.board||'ops'}`;
+        html += `<td><div class="gantt-cell has-task" title="${s.name} ${w} ${st.label}" onclick="window.location.href='/52week-board/current.html'"><div class="gantt-dot ${dotClass}">${w.replace('W','')}</div></div></td>`;
       } else {
         html += '<td><div class="gantt-cell"><div class="gantt-empty"></div></div></td>';
       }
@@ -228,20 +364,55 @@ function renderGantt() {
 // ====== 渲染周次列表 ======
 function renderWeekList() {
   let totalProgress=0,totalDone=0,totalOverdue=0,totalAll=0;
+  let opsCount=0,trainingCount=0,academyCount=0,officeCount=0;
   const weekList = document.getElementById('weekList');
   const wKeys = Object.keys(allTasks).sort().reverse();
 
   weekList.innerHTML = wKeys.map(wk => {
     const wd = allTasks[wk];
-    const entries = Object.entries(wd.tasks);
+    // 过滤当前板块的任务
+    const allEntries = Object.entries(wd.tasks);
+    const entries = allEntries.filter(([name,t]) => t.board === currentBoard);
     const isCur = wk === currentWeek;
     let wP=0,wD=0,wO=0;
-    entries.forEach(([s,t])=>{
+
+    // 统计所有板块的进行中任务数
+    allEntries.forEach(([s,t])=>{
       totalAll++;
+      if(t.board==='ops' && t.status==='progress') opsCount++;
+      if(t.board==='training' && t.status==='progress') trainingCount++;
+      if(t.board==='academy' && t.status==='progress') academyCount++;
+      if(t.board==='office' && t.status==='progress') officeCount++;
       if(t.status==='progress'){wP++;totalProgress++}
       else if(t.status==='done'){wD++;totalDone++}
       else if(t.status==='overdue'){wO++;totalOverdue++}
     });
+
+    if (entries.length === 0) {
+      return `<div class="week-row ${isCur?'current':''} ${isCur?'expanded':''}" onclick="toggleWeek(this)">
+        <div class="week-header">
+          <div class="week-info">
+            <span class="week-num">${wk}</span>
+            <span class="week-date">${wd.date}</span>
+            ${isCur?'<span class="week-tag">本周</span>':''}
+          </div>
+          <div class="week-status">
+            <span style="color:#999;font-size:13px;">${boardConfig[currentBoard].name}暂无任务</span>
+            <span class="week-arrow">▼</span>
+          </div>
+        </div>
+        <div class="week-content"><div class="week-tasks">
+          <div class="empty-week">${boardConfig[currentBoard].name}本周暂无跟进任务</div>
+        </div></div>
+      </div>`;
+    }
+
+    entries.forEach(([s,t])=>{
+      if(t.status==='progress'){wP++}
+      else if(t.status==='done'){wD++}
+      else if(t.status==='overdue'){wO++}
+    });
+
     return `
     <div class="week-row ${isCur?'current':''} ${isCur?'expanded':''}" onclick="toggleWeek(this)">
       <div class="week-header">
@@ -259,11 +430,14 @@ function renderWeekList() {
       </div>
       <div class="week-content"><div class="week-tasks">
         ${entries.map(([store,t])=>{
-          const si = stores.find(s=>s.name===store)||{group:'?'};
+          const si = stores.find(s=>s.name===store);
+          const groupDot = si ? `<span class="group-dot ${si.group}"></span>` : '';
           const st = statusLabel[t.status];
           const tp = typeLabel[t.type];
+          const boardTag = t.board ? `<span class="board-tag ${t.board}">${boardConfig[t.board].icon} ${boardConfig[t.board].name.replace('板块','')}</span>` : '';
           return `<div class="task-row">
-            <div class="task-store"><span class="group-dot ${si.group}"></span>${store}</div>
+            <div class="task-store">${groupDot}${store}</div>
+            ${boardTag}
             <span class="task-status-mini ${st.class}">${st.label}</span>
             <span class="task-type-mini ${tp.class}">${tp.label}</span>
             <div class="task-summary">${t.summary}</div>
@@ -278,9 +452,15 @@ function renderWeekList() {
   document.getElementById('totalDone').textContent=totalDone;
   document.getElementById('totalOverdue').textContent=totalOverdue;
   document.getElementById('totalAll').textContent=totalAll;
+  document.getElementById('opsCount').textContent=opsCount;
+  document.getElementById('trainingCount').textContent=trainingCount;
+  document.getElementById('academyCount').textContent=academyCount;
+  document.getElementById('officeCount').textContent=officeCount;
 }
 
 function toggleWeek(el){el.classList.toggle('expanded')}
+
+// 初始渲染
 renderGantt();
 renderWeekList();
 </script>

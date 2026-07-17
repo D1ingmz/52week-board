@@ -11,6 +11,8 @@
   --done:#27AE60; --progress:#F1C40F; --todo:#E74C3C; --overdue:#8B0000;
   --shadow:0 2px 8px rgba(0,0,0,0.08); --shadow-hover:0 4px 16px rgba(0,0,0,0.12);
   --col-A:#3498db; --col-B:#2ecc71; --col-C:#e67e22; --col-D:#9b59b6;
+  /* 板块色 */
+  --ops:#2D5F4E; --training:#2C6FAB; --academy:#8E44AD; --office:#D4A017;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
@@ -22,7 +24,17 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .nav-link:hover{background:rgba(255,255,255,0.15);color:white}
 .nav-link.active{background:rgba(255,255,255,0.2);color:white}
 
-.filter-bar{background:var(--white);padding:10px 24px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--light);flex-wrap:wrap;position:sticky;top:56px;z-index:50}
+/* 板块Tab栏 */
+.board-tabs{display:flex;background:var(--white);border-bottom:2px solid var(--lighter);padding:0 24px;position:sticky;top:56px;z-index:99;overflow-x:auto}
+.board-tab{padding:10px 20px;font-size:14px;font-weight:600;color:#888;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.board-tab:hover{color:var(--dark);background:var(--lighter)}
+.board-tab.active{font-weight:700}
+.board-tab.active[data-board="ops"]{color:var(--ops);border-bottom-color:var(--ops)}
+.board-tab.active[data-board="training"]{color:var(--training);border-bottom-color:var(--training)}
+.board-tab.active[data-board="academy"]{color:var(--academy);border-bottom-color:var(--academy)}
+.board-tab.active[data-board="office"]{color:var(--office);border-bottom-color:var(--office)}
+
+.filter-bar{background:var(--white);padding:10px 24px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--light);flex-wrap:wrap;position:sticky;top:112px;z-index:50}
 .search-box{padding:6px 12px;border:2px solid var(--light);border-radius:20px;font-size:13px;width:200px;transition:all 0.2s;outline:none}
 .search-box:focus{border-color:var(--medium);width:260px}
 .filter-btn{padding:5px 14px;border:2px solid var(--light);background:var(--white);border-radius:20px;cursor:pointer;font-size:13px;font-weight:600;color:#666;transition:all 0.2s}
@@ -71,6 +83,15 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .summary-item{background:var(--white);border-radius:8px;padding:8px 16px;box-shadow:var(--shadow);font-size:13px;display:flex;align-items:center;gap:6px}
 .summary-item .si-val{font-weight:700;color:var(--primary);font-size:16px}
 
+/* 非运营板块提示 */
+.other-board-notice{text-align:center;padding:60px 20px;color:#999}
+.other-board-notice .icon{font-size:48px;margin-bottom:12px}
+.other-board-notice .title{font-size:18px;font-weight:700;color:#666;margin-bottom:8px}
+.other-board-notice .desc{font-size:14px;color:#999}
+.other-board-notice .link{margin-top:16px}
+.other-board-notice .link a{display:inline-block;padding:8px 20px;background:var(--primary);color:white;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;transition:all 0.2s}
+.other-board-notice .link a:hover{background:var(--dark)}
+
 @media (max-width:768px){
   .filter-bar{padding:8px 12px}
   .top-bar{padding:0 12px}
@@ -78,6 +99,8 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
   .search-box{width:120px}
   .table-wrap{padding:8px}
   .stores-table{min-width:600px}
+  .board-tabs{padding:0 12px}
+  .board-tab{padding:8px 14px;font-size:13px}
 }
 </style>
 </head>
@@ -92,19 +115,40 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
   </div>
 </div>
 
-<div class="filter-bar">
-  <input type="text" class="search-box" placeholder="🔍 搜索门店..." id="searchBox" oninput="render()">
-  <button class="filter-btn active" onclick="filterGroup('all')">全部<span class="count">(30)</span></button>
-  <button class="filter-btn" onclick="filterGroup('A')">A组<span class="count">(7)</span></button>
-  <button class="filter-btn" onclick="filterGroup('B')">B组<span class="count">(9)</span></button>
-  <button class="filter-btn" onclick="filterGroup('C')">C组<span class="count">(6)</span></button>
-  <button class="filter-btn" onclick="filterGroup('D')">D组<span class="count">(8)</span></button>
-  <span class="week-display">W29 · 7月第三周</span>
+<!-- 板块Tab栏 -->
+<div class="board-tabs" id="boardTabs">
+  <div class="board-tab active" data-board="ops" onclick="switchBoard('ops')">📋 运营</div>
+  <div class="board-tab" data-board="training" onclick="switchBoard('training')">🎓 培训</div>
+  <div class="board-tab" data-board="academy" onclick="switchBoard('academy')">📚 管理学院</div>
+  <div class="board-tab" data-board="office" onclick="switchBoard('office')">🏢 总经办</div>
 </div>
 
-<div class="summary-row" id="summaryRow"></div>
-<div class="table-wrap">
-  <table class="stores-table" id="storesTable"></table>
+<!-- 运营板块内容 -->
+<div id="opsContent">
+  <div class="filter-bar">
+    <input type="text" class="search-box" placeholder="🔍 搜索门店..." id="searchBox" oninput="render()">
+    <button class="filter-btn active" onclick="filterGroup('all')">全部<span class="count">(30)</span></button>
+    <button class="filter-btn" onclick="filterGroup('A')">A组<span class="count">(7)</span></button>
+    <button class="filter-btn" onclick="filterGroup('B')">B组<span class="count">(9)</span></button>
+    <button class="filter-btn" onclick="filterGroup('C')">C组<span class="count">(6)</span></button>
+    <button class="filter-btn" onclick="filterGroup('D')">D组<span class="count">(8)</span></button>
+    <span class="week-display">W29 · 7月第三周</span>
+  </div>
+
+  <div class="summary-row" id="summaryRow"></div>
+  <div class="table-wrap">
+    <table class="stores-table" id="storesTable"></table>
+  </div>
+</div>
+
+<!-- 其他板块提示 -->
+<div id="otherBoardNotice" style="display:none;">
+  <div class="other-board-notice">
+    <div class="icon" id="noticeIcon">🎓</div>
+    <div class="title" id="noticeTitle">培训板块</div>
+    <div class="desc">该板块请前往本周看板查看详细任务跟进</div>
+    <div class="link"><a href="/52week-board/current.html">前往本周看板 →</a></div>
+  </div>
 </div>
 
 <script>
@@ -129,16 +173,16 @@ const stores=[
 
 // 本周任务
 const tasks = {
-  "西城红场": {status:"progress",type:"long",summary:"能力+服务两方面管理挑战"},
-  "金安": {status:"progress",type:"long",summary:"转化率4.2→5.1；拓竹0开单"},
-  "大连甘井子": {status:"progress",type:"short",summary:"全维度达成跟进，确认周环比"},
-  "大连凯德": {status:"progress",type:"short",summary:"业绩达成周环比+短板人员"},
-  "沈阳万象城": {status:"progress",type:"short",summary:"人货场全维度提升；拓竹破零"},
-  "佳木斯万达": {status:"progress",type:"long",summary:"3PP+业绩+新人成长四维度"},
-  "香坊万达": {status:"progress",type:"short",summary:"业绩低于哈东，调查复盘"},
+  "西城红场": {board:"ops",status:"progress",type:"long",summary:"能力+服务两方面管理挑战"},
+  "金安": {board:"ops",status:"progress",type:"long",summary:"转化率4.2→5.1；拓竹0开单"},
+  "大连甘井子": {board:"ops",status:"progress",type:"short",summary:"全维度达成跟进，确认周环比"},
+  "大连凯德": {board:"ops",status:"progress",type:"short",summary:"业绩达成周环比+短板人员"},
+  "沈阳万象城": {board:"ops",status:"progress",type:"short",summary:"人货场全维度提升；拓竹破零"},
+  "佳木斯万达": {board:"ops",status:"progress",type:"long",summary:"3PP+业绩+新人成长四维度"},
+  "香坊万达": {board:"ops",status:"progress",type:"short",summary:"业绩低于哈东，调查复盘"},
 };
 
-// 上周达成结果（W28）—后续真实更新
+// 上周达成结果（W28）
 const lastWeek = {
   "西城红场": {status:"progress",result:"进行中（转化率待提升）"},
   "金安": {status:"progress",result:"转化率4.5，持续跟进"},
@@ -156,6 +200,31 @@ const statusLabel={progress:{label:"进行中",class:"progress"},done:{label:"�
 const lastStatusLabel={done:{label:"✅ 已完成",class:"last-done"},overdue:{label:"🔴 逾期",class:"last-overdue"},progress:{label:"⚡ 进行中",class:"progress"}};
 
 let currentFilter='all';
+let currentBoard='ops';
+
+const boardConfig = {
+  ops: {name:"运营板块",icon:"📋"},
+  training: {name:"培训板块",icon:"🎓"},
+  academy: {name:"管理学院板块",icon:"📚"},
+  office: {name:"总经办板块",icon:"🏢"},
+};
+
+function switchBoard(board) {
+  currentBoard = board;
+  document.querySelectorAll('.board-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.board === board);
+  });
+
+  if (board === 'ops') {
+    document.getElementById('opsContent').style.display = 'block';
+    document.getElementById('otherBoardNotice').style.display = 'none';
+  } else {
+    document.getElementById('opsContent').style.display = 'none';
+    document.getElementById('otherBoardNotice').style.display = 'block';
+    document.getElementById('noticeIcon').textContent = boardConfig[board].icon;
+    document.getElementById('noticeTitle').textContent = boardConfig[board].name;
+  }
+}
 
 function render() {
   const term = document.getElementById('searchBox').value.trim();
