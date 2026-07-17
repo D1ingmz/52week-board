@@ -30,9 +30,6 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .board-tab:hover{color:var(--dark);background:var(--lighter)}
 .board-tab.active{font-weight:700}
 .board-tab.active[data-board="ops"]{color:var(--ops);border-bottom-color:var(--ops)}
-.board-tab.active[data-board="training"]{color:var(--training);border-bottom-color:var(--training)}
-.board-tab.active[data-board="academy"]{color:var(--academy);border-bottom-color:var(--academy)}
-.board-tab.active[data-board="office"]{color:var(--office);border-bottom-color:var(--office)}
 
 .filter-bar{background:var(--white);padding:10px 24px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--light);flex-wrap:wrap;position:sticky;top:112px;z-index:50}
 .search-box{padding:6px 12px;border:2px solid var(--light);border-radius:20px;font-size:13px;width:200px;transition:all 0.2s;outline:none}
@@ -118,9 +115,6 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 <!-- 板块Tab栏 -->
 <div class="board-tabs" id="boardTabs">
   <div class="board-tab active" data-board="ops" onclick="switchBoard('ops')">📋 运营</div>
-  <div class="board-tab" data-board="training" onclick="switchBoard('training')">🎓 培训</div>
-  <div class="board-tab" data-board="academy" onclick="switchBoard('academy')">📚 管理学院</div>
-  <div class="board-tab" data-board="office" onclick="switchBoard('office')">🏢 总经办</div>
 </div>
 
 <!-- 运营板块内容 -->
@@ -203,10 +197,7 @@ let currentFilter='all';
 let currentBoard='ops';
 
 const boardConfig = {
-  ops: {name:"运营板块",icon:"📋"},
-  training: {name:"培训板块",icon:"🎓"},
-  academy: {name:"管理学院板块",icon:"📚"},
-  office: {name:"总经办板块",icon:"🏢"},
+  ops: {name:"运营",icon:"📋"},
 };
 
 function switchBoard(board) {

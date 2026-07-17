@@ -31,9 +31,6 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 .board-tab:hover{color:var(--dark);background:var(--lighter)}
 .board-tab.active{font-weight:700}
 .board-tab.active[data-board="ops"]{color:var(--ops);border-bottom-color:var(--ops)}
-.board-tab.active[data-board="training"]{color:var(--training);border-bottom-color:var(--training)}
-.board-tab.active[data-board="academy"]{color:var(--academy);border-bottom-color:var(--academy)}
-.board-tab.active[data-board="office"]{color:var(--office);border-bottom-color:var(--office)}
 
 /* 趋势图区 */
 .trend-section{padding:16px 24px;max-width:1600px;margin:0 auto}
@@ -185,9 +182,6 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
 <!-- 板块Tab栏 -->
 <div class="board-tabs" id="boardTabs">
   <div class="board-tab active" data-board="ops" onclick="switchBoard('ops')">📋 运营</div>
-  <div class="board-tab" data-board="training" onclick="switchBoard('training')">🎓 培训</div>
-  <div class="board-tab" data-board="academy" onclick="switchBoard('academy')">📚 管理学院</div>
-  <div class="board-tab" data-board="office" onclick="switchBoard('office')">🏢 总经办</div>
 </div>
 
 <!-- 趋势图 -->
@@ -201,9 +195,6 @@ body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:var(--bg)
     <div class="trend-stacked" id="trendStacked"></div>
     <div class="trend-stacked-legend">
       <div class="item"><div class="dot" style="background:var(--ops)"></div>运营</div>
-      <div class="item"><div class="dot" style="background:var(--training)"></div>培训</div>
-      <div class="item"><div class="dot" style="background:var(--academy)"></div>管理学院</div>
-      <div class="item"><div class="dot" style="background:var(--office)"></div>总经办</div>
     </div>
   </div>
 </div>
@@ -328,105 +319,7 @@ const tasks = {
   }
 };
 
-// ====== 培训板块任务 ======
-const trainingTasks = {
-  "新人培训跟踪": {
-    board:"training",week:"W29",status:"progress",type:"long",trainer:"培训师1",
-    summary:"两天一问新人跟进 + 管培生跟进",
-    focus:"两天一问新人跟进；管培生成长跟踪",
-    actions:"1.每两天对新人进行一次跟进问询，记录成长状态\n2.管培生专项跟进，确认培养进度和阶段性目标达成\n3.新人培训闭环验收（结构化学习+当堂考核+跟踪验收）\n4.异常情况及时上报，不留死角",
-    owner:"培训师1",deadline:"持续",completed:"",
-    note:"两天一问频率不可降，管培生需单独建跟踪档案"
-  },
-  "3PP配件培训": {
-    board:"training",week:"W29",status:"progress",type:"long",trainer:"培训师2",
-    summary:"音频节重点关注25人；鞍山万象汇重点盯；店面人员达成参差不齐",
-    focus:"音频节重点关注人员跟进（25人）；鞍山万象汇配件能力提升；店面人员达成水平拉齐",
-    actions:"1.音频节25名重点人员逐人跟进，确认学习进度和考核结果\n2.鞍山万象汇配件培训专项盯，配件强主机弱的固有问题需针对性改善\n3.各店配件达成数据拉取，找出参差不齐的根因\n4.对短板人员制定补充培训计划并跟踪执行\n5.对优秀人员提炼经验，形成可复制打法推广",
-    owner:"培训师2",deadline:"持续",completed:"",
-    note:"鞍山万象汇为收购门店，继承原代理商店员，配件强主机弱问题需持续改善"
-  },
-  "3331服务行为规范": {
-    board:"training",week:"W29",status:"progress",type:"long",trainer:"培训师3",
-    summary:"西城红场专项跟进（每天检查）；新增金安店跟进",
-    focus:"西城红场每天检查3331执行情况；金安店新增跟进",
-    actions:"1.西城红场每天检查3331服务规范执行，当日问题当日反馈\n2.金安店新增3331跟进，确认服务标准落地情况\n3.暗访检查安排，覆盖两家门店\n4.检查结果记录建档，异常项跟踪整改\n5.与店长保持沟通，确保整改闭环",
-    owner:"培训师3",deadline:"持续",completed:"",
-    note:"西城红场为TOP1客流店，服务标准不能降；金安为新增加跟进门店"
-  },
-  "Coach项目管理": {
-    board:"training",week:"W29",status:"progress",type:"long",trainer:"培训师4",
-    summary:"哈尔滨万象汇Coach为当前短板，主动性差",
-    focus:"短板Coach跟进：哈万象汇Coach主动性提升",
-    actions:"1.哈万象汇Coach专项跟进，重点解决主动性差的问题\n2.与Coach本人沟通，了解主动性差的根因（能力/态度/管理支持）\n3.制定改善计划并设定阶段性目标\n4.持续跟踪Coach行为变化，每周至少一次现场观察\n5.与其他门店Coach做横向对比，找差距给方向",
-    owner:"培训师4",deadline:"持续",completed:"",
-    note:"哈万象汇为B组霸榜门店，Coach短板会拖累整体服务品质"
-  },
-};
-
-// ====== 管理学院板块任务 ======
-const academyTasks = {
-  "精英训练营": {
-    board:"academy",week:"W29",status:"progress",type:"long",
-    summary:"精英训练营（5人）：柴智、于喜峰、金厚博、赵蕊、韩方琪",
-    focus:"5名精英训练进展跟踪；阶段性目标达成验收",
-    actions:"1.柴智 — 训练进度跟踪\n2.于喜峰 — 训练进度跟踪\n3.金厚博 — 训练进度跟踪\n4.赵蕊 — 训练进度跟踪\n5.韩方琪 — 训练进度跟踪\n6.每月汇总5人训练成果，对标杆对差距\n7.阶段性考核验收，不达标者调整训练方案",
-    owner:"培训经理",deadline:"持续",completed:"",
-    note:"精英训练营人员5人：柴智、于喜峰、金厚博、赵蕊、韩方琪"
-  },
-  "储备管理": {
-    board:"academy",week:"W29",status:"progress",type:"long",
-    summary:"储备管理培养（2人）：梁瑞禹、刘丹",
-    focus:"2名储备管理人员培养进度；管理能力提升跟踪",
-    actions:"1.梁瑞禹 — 储备管理培养进度跟踪\n2.刘丹 — 储备管理培养进度跟踪\n3.管理能力评估（1573模型/5+5模型对标）\n4.阶段性目标设定与验收\n5.实际管理场景演练与复盘",
-    owner:"培训经理",deadline:"持续",completed:"",
-    note:"储备管理人员2人：梁瑞禹、刘丹"
-  },
-  "调动店长": {
-    board:"academy",week:"W29",status:"progress",type:"long",
-    summary:"调动店长跟进（2人）：谢慧达、王超",
-    focus:"2名调动店长新店适应情况；新店长上任三板斧执行验收",
-    actions:"1.谢慧达 — 调店后适应情况跟踪，新店长三板斧执行验收\n2.王超 — 调店后适应情况跟踪，新店长三板斧执行验收\n3.上任3天内全员宣贯完成确认\n4.数据摸底（近3个月业绩/转化率/配件占比）确认\n5.目标拆解到个人确认\n6.人员盘点结果确认",
-    owner:"培训经理",deadline:"持续",completed:"",
-    note:"调动店长2人：谢慧达、王超；按新店长上任三板斧制度执行"
-  },
-  "专项提升": {
-    board:"academy",week:"W29",status:"progress",type:"long",
-    summary:"专项提升（3人）：赵桐、纪哲、苏宇辰",
-    focus:"3名需专项提升人员的能力短板改善；阶段性成果验收",
-    actions:"1.赵桐 — 专项提升方案执行跟踪\n2.纪哲 — 专项提升方案执行跟踪\n3.苏宇辰 — 专项提升方案执行跟踪（佳木斯店长，新人培训异常事件后持续跟进）\n4.每人与培训经理一对一沟通，确认提升方向\n5.设定改善里程碑，阶段性验收",
-    owner:"培训经理",deadline:"持续",completed:"",
-    note:"专项提升3人：赵桐、纪哲、苏宇辰（苏宇辰为佳木斯店长，上半年新人培训异常事件后持续跟踪）"
-  },
-};
-
-// ====== 总经办板块任务 ======
-const officeTasks = {
-  "紧急任务": {
-    board:"office",week:"W29",status:"progress",type:"short",
-    summary:"当前任务：销售员的一天",
-    focus:"「销售员的一天」培训手册输出落地",
-    actions:"1.基于现有16页PDF手册内容，输出可执行的培训文档\n2.11大模块（M1~M11）逐模块验收\n3.新人培训验收必须覆盖此手册\n4.店长检查清单同步输出\n5.确认手册内容与门店实际操作一致，无脱节",
-    owner:"培训经理",deadline:"本周",completed:"",
-    note:"紧急任务优先级最高；源文件：~/Downloads/销售的一天.pdf（16页，11大模块）"
-  },
-  "重要任务": {
-    board:"office",week:"W29",status:"progress",type:"long",
-    summary:"区域日报、会议状态、问题解决反馈",
-    focus:"区域日报质量把控；会议状态跟踪；问题解决反馈闭环",
-    actions:"1.区域日报每日审核，确认内容完整性和数据准确性\n2.各项会议状态跟踪（启动会/午会/总结会/周例会）\n3.问题解决反馈机制执行：发现问题→分配责任人→跟踪解决→闭环确认\n4.跨部门协调事项跟踪\n5.重要事项向上汇报（PREP模型）",
-    owner:"培训经理",deadline:"持续",completed:"",
-    note:"重要任务为持续性工作，需建立常态化跟踪机制"
-  },
-  "一般任务": {
-    board:"office",week:"W29",status:"progress",type:"long",
-    summary:"关注线上业务与厂家对接规范性",
-    focus:"线上业务合规性；厂家对接流程规范性",
-    actions:"1.线上业务（京东到家/美团/抖音）履约合规性跟踪\n2.厂家对接流程规范性检查（XPOS/京东自营/天猫单号对接）\n3.超时和商责数据定期分析（参照上半年超时236单/商责67单数据）\n4.规范性问题发现后及时纠正并培训\n5.与厂家对接的关键人员（王术洋/穆琪琪等）保持沟通",
-    owner:"培训经理",deadline:"持续",completed:"",
-    note:"一般任务为常规关注项，异常时升级为重要或紧急任务"
-  },
-};
+// 培训/管理学院/总经办板块已移除，仅保留运营看板
 
 const statusMap={done:{label:"已完成",class:"done",progress:100},progress:{label:"进行中",class:"progress",progress:50},todo:{label:"未开始",class:"todo",progress:5},overdue:{label:"逾期",class:"overdue",progress:100},none:{label:"暂无",class:"none",progress:0}};
 const typeMap={short:{label:"短期",class:"short"},long:{label:"长期",class:"long"},none:{label:"未定",class:"none"}};
@@ -434,9 +327,6 @@ const typeMap={short:{label:"短期",class:"short"},long:{label:"长期",class:"
 // ====== 板块配置 ======
 const boardConfig = {
   ops: {name:"运营",icon:"📋",color:"var(--ops)"},
-  training: {name:"培训",icon:"🎓",color:"var(--training)"},
-  academy: {name:"管理学院",icon:"📚",color:"var(--academy)"},
-  office: {name:"总经办",icon:"🏢",color:"var(--office)"},
 };
 
 let currentBoard = 'ops';
@@ -451,23 +341,10 @@ function switchBoard(board) {
     t.classList.toggle('active', t.dataset.board === board);
   });
 
-  // 更新筛选栏显示
   const filterBar = document.getElementById('filterBar');
-  if (board === 'ops') {
-    filterBar.style.display = 'flex';
-  } else {
-    // 非运营板块隐藏ABCD组筛选
-    filterBar.style.display = 'flex';
-    // 更新搜索框placeholder
-    document.getElementById('searchBox').placeholder = '🔍 搜索' + boardConfig[board].name + '...';
-  }
-
-  // 更新section标题
-  const titleEl = document.getElementById('sectionTitle');
-  titleEl.innerHTML = `${boardConfig[board].icon} ${boardConfig[board].name}本周任务 <span class="badge" id="taskCount">0</span>`;
-
-  // 隐藏无任务区（非运营板块不需要）
-  document.getElementById('noTaskSection').style.display = board === 'ops' ? 'block' : 'none';
+  filterBar.style.display = 'flex';
+  document.getElementById('searchBox').placeholder = '🔍 搜索...';
+  document.getElementById('noTaskSection').style.display = 'block';
 
   render();
 }
@@ -498,16 +375,11 @@ function renderTrend() {
   document.getElementById('trendBars').innerHTML = barsHtml;
 
   // 汇总
-  const totalTasks = Object.keys(tasks).length + Object.keys(trainingTasks).length + Object.keys(academyTasks).length + Object.keys(officeTasks).length;
+  const totalTasks = Object.keys(tasks).length;
   const maxStreak = Math.max(...Object.values(streakData));
-  const longTasks = Object.values(tasks).filter(t=>t.type==='long').length;
-  const shortTasks = Object.keys(tasks).length - longTasks;
   document.getElementById('trendSummary').innerHTML = `
     <div class="trend-summary-item"><span class="ts-icon">📌</span> 全部任务 <span class="ts-val">${totalTasks}</span></div>
     <div class="trend-summary-item"><span class="ts-icon">📋</span> 运营 <span class="ts-val">${Object.keys(tasks).length}</span></div>
-    <div class="trend-summary-item"><span class="ts-icon">🎓</span> 培训 <span class="ts-val">${Object.keys(trainingTasks).length}</span></div>
-    <div class="trend-summary-item"><span class="ts-icon">📚</span> 管理学院 <span class="ts-val">${Object.keys(academyTasks).length}</span></div>
-    <div class="trend-summary-item"><span class="ts-icon">🏢</span> 总经办 <span class="ts-val">${Object.keys(officeTasks).length}</span></div>
     <div class="trend-summary-item"><span class="ts-icon">🔥</span> 最长连续跟进 <span class="ts-val">${maxStreak}周</span></div>
   `;
 
@@ -517,27 +389,21 @@ function renderTrend() {
 
 function renderStackedTrend() {
   const stackedData = [
-    {week:"W26", ops:0, training:0, academy:0, office:0},
-    {week:"W27", ops:0, training:0, academy:0, office:0},
-    {week:"W28", ops:2, training:0, academy:0, office:0},
-    {week:"W29", ops:7, training:4, academy:4, office:3},
+    {week:"W26", ops:0},
+    {week:"W27", ops:0},
+    {week:"W28", ops:2},
+    {week:"W29", ops:7},
   ];
-  const maxVal = Math.max(...stackedData.map(d=>d.ops+d.training+d.academy+d.office), 1);
+  const maxVal = Math.max(...stackedData.map(d=>d.ops), 1);
   const barH = 100;
 
   const html = stackedData.map(d => {
-    const total = d.ops + d.training + d.academy + d.office;
+    const total = d.ops;
     const isCurrent = d.week === "W29";
     const opsH = d.ops ? Math.round(d.ops/maxVal*barH) : 0;
-    const trainingH = d.training ? Math.round(d.training/maxVal*barH) : 0;
-    const academyH = d.academy ? Math.round(d.academy/maxVal*barH) : 0;
-    const officeH = d.office ? Math.round(d.office/maxVal*barH) : 0;
     return `<div class="trend-stacked-group">
-      <div class="trend-stacked-bar" style="height:${opsH+trainingH+academyH+officeH||4}px;${isCurrent?'box-shadow:0 0 0 2px var(--primary);':''}">
+      <div class="trend-stacked-bar" style="height:${opsH||4}px;${isCurrent?'box-shadow:0 0 0 2px var(--primary);':''}">
         ${d.ops?`<div class="trend-stacked-seg ops" style="height:${opsH}px" title="运营: ${d.ops}"></div>`:''}
-        ${d.training?`<div class="trend-stacked-seg training" style="height:${trainingH}px" title="培训: ${d.training}"></div>`:''}
-        ${d.academy?`<div class="trend-stacked-seg academy" style="height:${academyH}px" title="管理学院: ${d.academy}"></div>`:''}
-        ${d.office?`<div class="trend-stacked-seg office" style="height:${officeH}px" title="总经办: ${d.office}"></div>`:''}
       </div>
       ${total>0?`<span style="font-size:11px;font-weight:700;color:#666;">${total}</span>`:''}
       <span class="trend-stacked-label" style="${isCurrent?'color:var(--primary);font-weight:700;':''}">${d.week}</span>
@@ -549,16 +415,7 @@ function renderStackedTrend() {
 // ====== 渲染看板 ======
 function render() {
   const board = document.getElementById('board');
-
-  if (currentBoard === 'ops') {
-    renderOpsBoard(board);
-  } else if (currentBoard === 'training') {
-    renderTrainingBoard(board);
-  } else if (currentBoard === 'academy') {
-    renderAcademyBoard(board);
-  } else if (currentBoard === 'office') {
-    renderOfficeBoard(board);
-  }
+  renderOpsBoard(board);
 }
 
 // ====== 运营板块渲染 ======
@@ -642,192 +499,7 @@ function renderNoTaskCard(s) {
   </div>`;
 }
 
-// ====== 培训板块渲染 ======
-function renderTrainingBoard(board) {
-  let taskList = Object.entries(trainingTasks);
-  if (searchTerm) {
-    taskList = taskList.filter(([name]) => name.includes(searchTerm));
-  }
-
-  document.getElementById('taskCount').textContent = taskList.length;
-
-  // 按培训师分组
-  const trainers = ["培训师1","培训师2","培训师3","培训师4"];
-  let html = '';
-  trainers.forEach(trainer => {
-    const trainerTasks = taskList.filter(([name,t]) => t.trainer === trainer);
-    if (trainerTasks.length === 0) return;
-    html += `<div class="trainer-section">
-      <div class="trainer-header"><span class="trainer-tag">${trainer}</span></div>
-      <div class="board" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;">`;
-    trainerTasks.forEach(([name,t]) => {
-      html += renderTrainingCard(name, t);
-    });
-    html += `</div></div>`;
-  });
-
-  if (taskList.length === 0) {
-    html = '<div class="empty-state"><div style="font-size:36px;">🔍</div><p>未找到匹配的任务</p></div>';
-  }
-
-  board.innerHTML = html;
-}
-
-function renderTrainingCard(name, t) {
-  const status = statusMap[t.status];
-  const type = typeMap[t.type];
-  return `
-  <div class="store-card board-training" onclick="toggleExpand(this)" data-store="${name}">
-    <div class="card-header">
-      <span class="store-name">${name}</span>
-      <span class="group-tag g-training">${t.trainer}</span>
-    </div>
-    <div class="card-status-bar">
-      <span class="status-badge ${status.class}">${status.label}</span>
-      <span class="type-badge ${type.class}">${type.label}</span>
-      <span class="card-week">${t.week}</span>
-    </div>
-    <div class="card-body">
-      <div class="label">数据摘要</div>
-      <div class="content">${t.summary}</div>
-      <div class="label">本周重点</div>
-      <div class="content">${t.focus}</div>
-    </div>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar"><div class="progress-fill ${status.class}"></div></div>
-      <div class="progress-text">${status.label} · ${status.progress}%</div>
-    </div>
-    <div class="card-expand">
-      <div class="card-expand-content">
-        <div class="expand-row"><span class="e-label">执行指令</span><span class="e-val">${(t.actions||'').replace(/\n/g,'<br>')}</span></div>
-        <div class="expand-row"><span class="e-label">责任人</span><span class="e-val">${t.owner}</span></div>
-        <div class="expand-row"><span class="e-label">计划完成</span><span class="e-val">${t.deadline}</span></div>
-        <div class="expand-row"><span class="e-label">实际完成</span><span class="e-val">${t.completed||'—'}</span></div>
-        <div class="expand-row"><span class="e-label">备注</span><span class="e-val">${t.note||'—'}</span></div>
-      </div>
-    </div>
-  </div>`;
-}
-
-// ====== 管理学院板块渲染 ======
-function renderAcademyBoard(board) {
-  let taskList = Object.entries(academyTasks);
-  if (searchTerm) {
-    taskList = taskList.filter(([name]) => name.includes(searchTerm));
-  }
-
-  document.getElementById('taskCount').textContent = taskList.length;
-
-  let html = `<div class="academy-section">
-    <div class="academy-header">📚 管理学院课程/模型体系</div>
-    <div class="board" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;">`;
-  taskList.forEach(([name,t]) => {
-    html += renderAcademyCard(name, t);
-  });
-  html += `</div></div>`;
-
-  if (taskList.length === 0) {
-    html = '<div class="empty-state"><div style="font-size:36px;">🔍</div><p>未找到匹配的任务</p></div>';
-  }
-
-  board.innerHTML = html;
-}
-
-function renderAcademyCard(name, t) {
-  const status = statusMap[t.status];
-  const type = typeMap[t.type];
-  return `
-  <div class="store-card board-academy" onclick="toggleExpand(this)" data-store="${name}">
-    <div class="card-header">
-      <span class="store-name">${name}</span>
-      <span class="group-tag g-academy">管理学院</span>
-    </div>
-    <div class="card-status-bar">
-      <span class="status-badge ${status.class}">${status.label}</span>
-      <span class="type-badge ${type.class}">${type.label}</span>
-      <span class="card-week">${t.week}</span>
-    </div>
-    <div class="card-body">
-      <div class="label">数据摘要</div>
-      <div class="content">${t.summary}</div>
-      <div class="label">本周重点</div>
-      <div class="content">${t.focus}</div>
-    </div>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar"><div class="progress-fill ${status.class}"></div></div>
-      <div class="progress-text">${status.label} · ${status.progress}%</div>
-    </div>
-    <div class="card-expand">
-      <div class="card-expand-content">
-        <div class="expand-row"><span class="e-label">执行指令</span><span class="e-val">${(t.actions||'').replace(/\n/g,'<br>')}</span></div>
-        <div class="expand-row"><span class="e-label">责任人</span><span class="e-val">${t.owner}</span></div>
-        <div class="expand-row"><span class="e-label">计划完成</span><span class="e-val">${t.deadline}</span></div>
-        <div class="expand-row"><span class="e-label">实际完成</span><span class="e-val">${t.completed||'—'}</span></div>
-        <div class="expand-row"><span class="e-label">备注</span><span class="e-val">${t.note||'—'}</span></div>
-      </div>
-    </div>
-  </div>`;
-}
-
-// ====== 总经办板块渲染 ======
-function renderOfficeBoard(board) {
-  let taskList = Object.entries(officeTasks);
-  if (searchTerm) {
-    taskList = taskList.filter(([name]) => name.includes(searchTerm));
-  }
-
-  document.getElementById('taskCount').textContent = taskList.length;
-
-  let html = `<div class="office-section">
-    <div class="office-header">🏢 总经办专项工作</div>
-    <div class="board" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;">`;
-  taskList.forEach(([name,t]) => {
-    html += renderOfficeCard(name, t);
-  });
-  html += `</div></div>`;
-
-  if (taskList.length === 0) {
-    html = '<div class="empty-state"><div style="font-size:36px;">🔍</div><p>未找到匹配的任务</p></div>';
-  }
-
-  board.innerHTML = html;
-}
-
-function renderOfficeCard(name, t) {
-  const status = statusMap[t.status];
-  const type = typeMap[t.type];
-  return `
-  <div class="store-card board-office" onclick="toggleExpand(this)" data-store="${name}">
-    <div class="card-header">
-      <span class="store-name">${name}</span>
-      <span class="group-tag g-office">总经办</span>
-    </div>
-    <div class="card-status-bar">
-      <span class="status-badge ${status.class}">${status.label}</span>
-      <span class="type-badge ${type.class}">${type.label}</span>
-      <span class="card-week">${t.week}</span>
-    </div>
-    <div class="card-body">
-      <div class="label">数据摘要</div>
-      <div class="content">${t.summary}</div>
-      <div class="label">本周重点</div>
-      <div class="content">${t.focus}</div>
-    </div>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar"><div class="progress-fill ${status.class}"></div></div>
-      <div class="progress-text">${status.label} · ${status.progress}%</div>
-    </div>
-    <div class="card-expand">
-      <div class="card-expand-content">
-        <div class="expand-row"><span class="e-label">执行指令</span><span class="e-val">${(t.actions||'').replace(/\n/g,'<br>')}</span></div>
-        <div class="expand-row"><span class="e-label">责任人</span><span class="e-val">${t.owner}</span></div>
-        <div class="expand-row"><span class="e-label">计划完成</span><span class="e-val">${t.deadline}</span></div>
-        <div class="expand-row"><span class="e-label">实际完成</span><span class="e-val">${t.completed||'—'}</span></div>
-        <div class="expand-row"><span class="e-label">备注</span><span class="e-val">${t.note||'—'}</span></div>
-      </div>
-    </div>
-  </div>`;
-}
+// 培训/管理学院/总经办渲染函数已移除
 
 function toggleExpand(card){card.classList.toggle('expanded')}
 function toggleNoTask(){noTaskExpanded=!noTaskExpanded;document.getElementById('noTaskBoard').classList.toggle('show',noTaskExpanded);document.getElementById('toggleBtn').textContent=noTaskExpanded?'收起 ▲':'展开 ▼'}
